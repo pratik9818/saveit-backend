@@ -1,0 +1,26 @@
+export const useridAbsent = 'User id is not persent ! Please login again'
+export const tokenAbsent = 'Token is not persent !'
+export const googletokenAbsent = 'Google acess token is not persent !'
+export const invalidEmail = 'Email is not valid !'
+export const serverError = 'Something went wrong'
+export const successfullylogin = 'Sucessfull login'
+export const dberror = 'Error in db connection'
+export const verifygoogletokenError = 'Error in verifying google token'
+export const invalidtoken = 'Token is invalid ! please login'
+export const capsulenameerror = 'Capsule name is not persent or capule name less then 2 words'
+export const capsuleiderror = 'Capsule id is not persent'
+export const capsulelimitAlert = 'Your capsule limit has been reached'
+export const capsuleCreatedError = 'Error occur while creating capsule'
+export const capsuleeditError = 'Error in editing capsule in db'
+export const capsuleCreated = 'New capsule created !'
+export const capsulenameUpdated = 'Capsule name updated !'
+
+export const tokenAge = 7776000
+
+export const badRequest = 400;
+export const successful = 200;
+export const internalserverError = 500;
+export const unauthorized = 401;
+export const resourceCreated = 201
+export const resourceUpdated = 204
+export const limitreached = 403
