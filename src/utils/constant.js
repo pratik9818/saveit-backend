@@ -11,9 +11,12 @@ export const capsulenameerror = 'Capsule name is not persent or capule name less
 export const capsuleiderror = 'Capsule id is not persent'
 export const capsulelimitAlert = 'Your capsule limit has been reached'
 export const capsuleCreatedError = 'Error occur while creating capsule'
+export const success = 'successfully'
 export const capsuleeditError = 'Error in editing capsule in db'
 export const capsuleCreated = 'New capsule created !'
 export const capsulenameUpdated = 'Capsule name updated !'
+export const datanotFound = 'no capsules'
+export const capsulesdataError = 'Error occur while getting capsules'
 
 export const tokenAge = 7776000
 
@@ -23,4 +26,5 @@ export const internalserverError = 500;
 export const unauthorized = 401;
 export const resourceCreated = 201
 export const resourceUpdated = 204
-export const limitreached = 403
+export const limitReached = 403
+export const notFound = 404

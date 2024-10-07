@@ -1,6 +1,6 @@
 import { AppError } from "../utils/error.js"
-import { badRequest, capsulenameerror,capsuleiderror } from "../utils/constant.js"
-import newcapsuleModal, { editcapsuleModal } from "../models/capsuleModals.js"
+import { badRequest, capsulenameerror,capsuleiderror, useridAbsent } from "../utils/constant.js"
+import newcapsuleModal, { getallcapsuleModal, editcapsuleModal } from "../models/capsuleModals.js"
 const mincharLimit = 2
 
 export const newCapsule = async (capsulename, userid) => {
@@ -19,4 +19,12 @@ export const editcapsuleName = async(capsulename,capsuleid)=>{
     } catch (error) {
         throw new AppError({status:error.status, message:error.message})
     }
+}
+export const getallCaplsules = async(userid)=>{
+        if(!userid)return {status:badRequest,message:useridAbsent}
+        try {
+            return getallcapsuleModal(userid)
+        } catch (error) {
+            
+        }
 }
