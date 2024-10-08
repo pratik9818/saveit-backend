@@ -1,4 +1,5 @@
 export const useridAbsent = 'User id is not persent ! Please login again'
+export const absentdeleteCapsuleIds = 'Capsule id is necssary to delete anyh capsule !'
 export const tokenAbsent = 'Token is not persent !'
 export const googletokenAbsent = 'Google acess token is not persent !'
 export const invalidEmail = 'Email is not valid !'
@@ -13,13 +14,22 @@ export const capsulelimitAlert = 'Your capsule limit has been reached'
 export const capsuleCreatedError = 'Error occur while creating capsule'
 export const success = 'successfully'
 export const capsuleeditError = 'Error in editing capsule in db'
+export const capsuledatemodifiedError = 'Error in get capsule by date modified in db'
+export const capsulesortbydatecreatedError = 'Error in get capsule by date created in db'
+export const capsulesortbysizeError = 'Error in get capsule by size in db'
+export const capsulesearchError = 'Error in get capsule by search in db'
+export const capsuledeleteError = 'Error in delete capsule in db'
+export const dateError = 'Date is neccassary for get capsules'
+export const orderMissing = 'order is missing , it is necessary get capsules'
+export const capsulessizeError = 'size is missing , it is necessary get capsules'
 export const capsuleCreated = 'New capsule created !'
 export const capsulenameUpdated = 'Capsule name updated !'
 export const datanotFound = 'no capsules'
 export const capsulesdataError = 'Error occur while getting capsules'
+export const searchvalueError = 'Search value absent'
 
 export const tokenAge = 7776000
-
+// export const maxStorage = 10000 //this is max. storage any user can have even permium user -10gb
 export const badRequest = 400;
 export const successful = 200;
 export const internalserverError = 500;
