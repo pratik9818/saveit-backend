@@ -18,8 +18,8 @@ export const uploadpresignedurlModal = async (userid) => {
 
         const s3 = new AWS.S3({
             endpoint: wasabiEndpoint,
-            accessKeyId: '3DKPCTPIVPIFHH6C0JWB',  // Your Wasabi Access Key
-            secretAccessKey: 'h0zRFk5UBgMXzqLCciziyjN1ERI37ypFUOUJ3Jsw',  // Your Wasabi Secret Key
+            accessKeyId: '',  // Your Wasabi Access Key
+            secretAccessKey: '',  // Your Wasabi Secret Key
             region: 'us-east-1',  // Choose the appropriate region (Wasabi uses 'us-east-1' generally)
         });
 
@@ -50,8 +50,3 @@ export const uploadpresignedurlModal = async (userid) => {
 
 }
 
-
-
-  
-// access-key= 3DKPCTPIVPIFHH6C0JWB
-// secret-key= h0zRFk5UBgMXzqLCciziyjN1ERI37ypFUOUJ3Jsw
