@@ -33,7 +33,7 @@ export const newcapsuleModal = async (capsulename, userid) => {
 
     } catch (error) {
         await client.query('rollback')
-        throw new AppError({ status: internalserverError.status, message: capsuleCreatedError })
+        throw new AppError({ status: internalserverError, message: capsuleCreatedError })
     }
 }
 

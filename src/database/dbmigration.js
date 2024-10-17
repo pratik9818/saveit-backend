@@ -76,7 +76,8 @@ CREATE TABLE reminder (
             capsule_name VARCHAR(50) NULL,
             capsule_size INT NOT NULL DEFAULT 0,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TEXT NULL
+            updated_at TEXT NULL,
+            is_deleted BOOLEAN DEFAULT FALSE
         )
 `
 
@@ -94,7 +95,7 @@ CREATE TABLE reminder (
             reminder BOOLEAN DEFAULT FALSE,
             download_count INT DEFAULT 0,
             url TEXT NULL,
-            note_content VARCHAR(10000) NULL
+            text_content VARCHAR(10000) NULL
             )
 `
     // const deltetable = `DROP TABLE notes `

@@ -14,4 +14,5 @@ export const incrementcapsuleCount = 'update subscription_detail set capsule_cou
 
 export const searchcapsulesbyName = 'select * from capsules where user_id=$1 and capsule_name ilike $2'
 
-export const deleteCapsules = 'delete from capsules where user_id=$1 and capsule_id = any($2)'
+// export const deleteCapsules = 'delete from capsules where user_id=$1 and capsule_id = any($2)'
+export const deleteCapsules = 'update capsules set is_deleted = true where user_id=$1 and capsule_id= any($2)'
