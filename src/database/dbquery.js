@@ -16,3 +16,13 @@ export const searchcapsulesbyName = 'select * from capsules where user_id=$1 and
 
 // export const deleteCapsules = 'delete from capsules where user_id=$1 and capsule_id = any($2)'
 export const deleteCapsules = 'update capsules set is_deleted = true where user_id=$1 and capsule_id= any($2)'
+
+export const insertfragmentfile = 'insert into fragments (capsule_id,size,tag,url,fragment_type,file_name) values ($1, $2, $3, $4,$5,$6)';
+export const insertfragmenttext = 'insert into fragments (capsule_id,size,tag,fragment_type,text_content) values ($1, $2, $3, $4,$5)';
+export const incrementstorageUsed = 'update subscription_detail set storage_used = storage_used + $1 where user_id=$2';
+export const updatecapsule = 'update capsules set capsule_size = capsule_size + $1 , updated_at=$2 where user_id=$3 and capsule_id=$4';
+export const getallFragments = 'select * from fragments where capsule_id=$1 and created_at <= $2 order by created_at desc limit 40'
+export const updateTag = 'update fragments set tag = $1 where fragment_id=$2';
+export const updateText = 'update fragments set text_content = $1 where fragment_id=$2';
+export const deleteFragments = 'update fragments set is_deleted = true where fragment_id= any($1)'
+export const incrementdownloadCount = 'update fragments set download_count = case when download_count < (select download_per_fragment_count from subscription_type where subscription_type_id = 1) then download_count + 1 else download_count end where fragment_id = $1 returning download_count'

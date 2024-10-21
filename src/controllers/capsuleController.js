@@ -10,8 +10,6 @@ export const createCapsule = async (req, res, next) => {
             message: message,
         })
     } catch (error) {
-        console.log(error);
-
         next({ status: error.status, message: error.message })
     }
 }

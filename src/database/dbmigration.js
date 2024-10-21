@@ -28,7 +28,7 @@ async function connectdb() {
     subscription_type_id int4 NOT NULL,
         CONSTRAINT fk_subscription FOREIGN KEY(subscription_type_id)
                 REFERENCES subscription_type(subscription_type_id),
-    storage_used INT NOT NULL DEFAULT 0,
+    storage_used REAL NOT NULL DEFAULT 0,
     all_subscription_history TEXT[],
     start_date TEXT NULL,
     expiry_date TEXT NULL,
@@ -74,12 +74,12 @@ CREATE TABLE reminder (
                 CONSTRAINT fk_user_id FOREIGN KEY(user_id)
                 REFERENCES users(user_id),
             capsule_name VARCHAR(50) NULL,
-            capsule_size INT NOT NULL DEFAULT 0,
+            capsule_size REAL NOT NULL DEFAULT 0,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TEXT NULL,
             is_deleted BOOLEAN DEFAULT FALSE
         )
-`
+    `
 
     const fragmenttable = `
             CREATE TABLE fragments(
@@ -90,12 +90,14 @@ CREATE TABLE reminder (
             size INT NOT NULL,
             fragment_type TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TEXT NOT NULL,
+            updated_at TEXT NULL,
             tag VARCHAR(100) NULL,
             reminder BOOLEAN DEFAULT FALSE,
             download_count INT DEFAULT 0,
             url TEXT NULL,
-            text_content VARCHAR(10000) NULL
+            text_content VARCHAR(10000) NULL,
+            file_name VARCHAR(500) DEFAULT NULL,
+             is_deleted BOOLEAN DEFAULT FALSE
             )
 `
     // const deltetable = `DROP TABLE notes `

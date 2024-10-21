@@ -5,6 +5,7 @@ import verifyToken from '../middleware/verifytoken.js'
 import verifygoogleToken from '../middleware/verifygoogleToken.js'
 import { uploadPresignedurl } from '../controllers/presignedurlController.js'
 import fileValidator from '../middleware/fileValidator.js'
+import { fileFragment ,textFragment ,getFragments,fragmentTag ,updatetextContent,deleteFragments,downloadFile} from '../controllers/fragmentController.js'
 const router = express.Router()
 
 router.post('/auth/google',verifygoogleToken,authController)
@@ -16,6 +17,13 @@ router.get('/capsules/filter/size',verifyToken, sortcapsulesbySize)
 router.get('/capsules/search',verifyToken, searchCapsules)
 router.delete('/capsules',verifyToken, deleteCapsules)
 
-router.get('/presignedurl/upload',verifyToken,fileValidator,uploadPresignedurl)
-// router.post('/fragments/files',verifyToken)
+router.put('/presignedurl/upload',verifyToken,fileValidator,uploadPresignedurl)
+router.post('/fragments/files',verifyToken,fileFragment)
+router.post('/fragments/text',verifyToken, textFragment)
+router.get('/fragments',verifyToken, getFragments) 
+router.put('/fragments/tag',verifyToken, fragmentTag)
+router.put('/fragments/text',verifyToken, updatetextContent)
+router.delete('/fragments',verifyToken, deleteFragments)
+router.get('/fragments/files/download',verifyToken, downloadFile)
+//batch delete-6-d , put for note-5 -d , post for note -1-d, getlist all fragment -2-d , get download-3 ,update tag-4-d
 export default router

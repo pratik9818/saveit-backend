@@ -98,6 +98,6 @@ export const deletebatchcapsulesModal = async(capsuleIds,userid) =>{
             const res = await client.query(deleteCapsules,[userid,capsuleIds]);
             return { status: successful, message: success,rowdelete:res.rowCount}
     } catch (error) {
-        throw new AppError({ status: internalserverError.status, message: capsuledeleteError })
+        throw new AppError({ status: internalserverError, message: capsuledeleteError })
     }
 }

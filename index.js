@@ -11,6 +11,7 @@ app.use(cors({
 }))
 app.use(express.json());
 app.use(cookieParser())
+// app.use(express.raw({ type: 'application/octet-stream'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/v1',userRoutes)
 app.use((err,req,res,next)=>{
