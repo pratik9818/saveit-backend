@@ -45,7 +45,7 @@ export const getcapsulesbyDatemodifiedModal = async(datemodified,userid) =>{
             if(!res.rows.length) return { status:notFound, message: datanotFound }
             return { status: successful, message: success , data:res.rows}
     } catch (error) {
-        throw new AppError({ status: internalserverError.status, message: capsuledatemodifiedError })
+        throw new AppError({ status: internalserverError, message: capsuledatemodifiedError })
     }
 }
 export const getcapsulesortbyDatecreatedModal = async(order,date,userid) =>{
@@ -61,7 +61,7 @@ export const getcapsulesortbyDatecreatedModal = async(order,date,userid) =>{
             return { status: successful, message: success , data:res.rows}
         }
     } catch (error) {
-        throw new AppError({ status: internalserverError.status, message: capsulesortbydatecreatedError })
+        throw new AppError({ status: internalserverError, message: capsulesortbydatecreatedError })
     }
 }
 
@@ -78,7 +78,7 @@ export const getcapsulesortbysizeModal = async(order,size,userid) =>{
             return { status: successful, message: success , data:res.rows}
         }
     } catch (error) {
-        throw new AppError({ status: internalserverError.status, message: capsulesortbysizeError })
+        throw new AppError({ status: internalserverError, message: capsulesortbysizeError })
     }
 }
 export const getcapsulesearchModal = async(searchvalue,userid) =>{
@@ -89,7 +89,7 @@ export const getcapsulesearchModal = async(searchvalue,userid) =>{
             if(!res.rows.length) return { status:notFound, message: datanotFound }
             return { status: successful, message: success , data:res.rows}
     } catch (error) {
-        throw new AppError({ status: internalserverError.status, message: capsulesearchError })
+        throw new AppError({ status: internalserverError, message: capsulesearchError })
     }
 }
 export const deletebatchcapsulesModal = async(capsuleIds,userid) =>{

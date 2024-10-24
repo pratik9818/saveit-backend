@@ -5,8 +5,8 @@ const wasabiEndpoint = new AWS.Endpoint('s3.wasabisys.com');  // Wasabi's S3-com
 
 export const s3 = new AWS.S3({
     endpoint: wasabiEndpoint,
-    accessKeyId: '',  // Your Wasabi Access Key
-    secretAccessKey: '',  // Your Wasabi Secret Key
+    accessKeyId: 'OSL58976EMG1NF22MQFZ',  // Your Wasabi Access Key
+    secretAccessKey: 'tSrgJms88OMqn8CM2M4SDGGSXmUDKO3h59lk5BAQ',  // Your Wasabi Secret Key
     region: 'us-east-1',  // Choose the appropriate region (Wasabi uses 'us-east-1' generally)
 });
 export const generateuploadpresignedUrl = async (bucketname, filename,userid) => {

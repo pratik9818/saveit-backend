@@ -1,8 +1,8 @@
 import database from "../database/dbConnection.js";
-import { bucketName, downloadfileError, downloadlimitExceed, fragmentCreated, fragmentdeleteError, fragmentfilecreatedError, fragmenttagcreatedError, fragmenttextcreatedError, getfragmentsError, internalserverError, limitReached, resourceCreated, s3Url, success, successful, textupdatedError } from "../utils/constant.js";
+import { bucketName, datanotFound, downloadfileError, downloadlimitExceed, fragmentCreated, fragmentdeleteError, fragmentfilecreatedError, fragmentsdocsfilterError, fragmentsfilterError, fragmentssearchError, fragmenttagcreatedError, fragmenttextcreatedError, getfragmentsError, internalserverError, limitReached, notFound, resourceCreated, s3Url, success, successful, textupdatedError } from "../utils/constant.js";
 import { AppError } from "../utils/error.js";
 import convertbytestoMb from '../utils/bytestoMb.js'
-import { insertfragmentfile, incrementstorageUsed, updatecapsule, insertfragmenttext, getallFragments, updateTag, updateText, deleteFragments, incrementdownloadCount } from '../database/dbquery.js'
+import { insertfragmentfile, incrementstorageUsed, updatecapsule, insertfragmenttext, getallFragments, updateTag, updateText, deleteFragments, incrementdownloadCount, searchfragments, filterfragments, filterdocsfragments, capsuleUpdatetime, updatecapsuleSize, decrementstorageUsed } from '../database/dbquery.js'
 export const filefragmentModal = async (capsuleid, size, tag, userid,filetype,filename) => {
 
     const client = await database()
@@ -71,7 +71,9 @@ export const fragmenttagModal = async (tag,fragmentid) => {
 
     const client = await database()
     try {
-         await client.query(updateTag, [tag,fragmentid])
+        const updated_at = new Date()
+         await client.query(updateTag, [tag,updated_at,fragmentid])
+         await client.query(capsuleUpdatetime, [updated_at,capsuleid])
         return { status: successful, message: success};
     } catch (error) {
         throw new AppError({ status: internalserverError, message: fragmenttagcreatedError })
@@ -81,18 +83,31 @@ export const fragmenttextcontentModal = async (textcontent,fragmentid) => {
 
     const client = await database()
     try {
-         await client.query(updateText, [textcontent,fragmentid])
+        const updated_at = new Date()
+         await client.query(updateText, [textcontent,updated_at,fragmentid])
+         await client.query(capsuleUpdatetime, [updated_at,capsuleid])
         return { status: successful, message: success};
     } catch (error) {
         throw new AppError({ status: internalserverError, message: textupdatedError })
     }
 }
-export const deletebatchfragmentModal = async(fragmentids) =>{
+export const deletebatchfragmentModal = async(fragmentids,userid,capsuleid) =>{
     const client = await database();
     try {
-            const res = await client.query(deleteFragments,[fragmentids]);
-            return { status: successful, message: success,rowdelete:res.rowCount}
+        const updated_at = new Date()
+        await client.query('begin')
+            const {rows} = await client.query(deleteFragments,[fragmentids]);
+            let capsuleSize = 0
+            for (let index = 0; index < rows.length; index++) {
+                capsuleSize = capsuleSize + rows[index].size
+            }
+             await client.query(updatecapsuleSize,[capsuleSize,updated_at,userid,capsuleid])
+
+             await client.query(decrementstorageUsed,[capsuleSize,userid])
+             await client.query('commit')
+            return { status: successful, message: success,rowdelete:rows.length}
     } catch (error) {
+        await client.query('rollback')
         throw new AppError({ status: internalserverError, message: fragmentdeleteError })
     }
 }
@@ -109,5 +124,38 @@ export const downloadfilefragmentModal = async(fragmentid) =>{
             return { status: successful, message: success,downloadcount:download_count}
     } catch (error) {
         throw new AppError({ status: internalserverError, message: downloadfileError })
+    }
+}
+
+export const getfragmentssearchModal = async(searchvalue,capsuleid) =>{
+    const client = await database();
+    try {
+            const searchTerm = `%${searchvalue}%`;
+            const res = await client.query(searchfragments,[capsuleid,searchTerm]);
+            if(!res.rows.length) return { status:notFound, message: datanotFound }
+            return { status: successful, message: success , data:res.rows}
+    } catch (error) {
+        throw new AppError({ status: internalserverError, message: fragmentssearchError })
+    }
+}
+export const fragmentsfilterModal = async(fragmenttype,capsuleid,createdat) =>{
+    const client = await database();
+    try {
+            const res = await client.query(filterfragments,[capsuleid,fragmenttype ,createdat]);
+            if(!res.rows.length) return { status:notFound, message: datanotFound }
+            return { status: successful, message: success , data:res.rows}
+    } catch (error) {
+        throw new AppError({ status: internalserverError, message: fragmentsfilterError })
+    }
+}
+export const fragmentsdocsfilterModal = async(capsuleid,createdat) =>{
+    const client = await database();
+    try {
+       
+            const res = await client.query(filterdocsfragments,[capsuleid,createdat,'text','video','image']);
+            if(!res.rows.length) return { status:notFound, message: datanotFound }
+            return { status: successful, message: success , data:res.rows}
+    } catch (error) {
+        throw new AppError({ status: internalserverError, message: fragmentsdocsfilterError })
     }
 }
