@@ -1,5 +1,5 @@
 import { AppError } from "../utils/error.js"
-import { badRequest, capsulenameerror,capsuleiderror, dateError, orderMissing, capsulessizeError, useridAbsent, searchvalueError, absentdeleteCapsuleIds } from "../utils/constant.js"
+import { badRequest, capsulenameerror,capsuleiderror, dateError, orderMissing, capsulessizeError, useridAbsent, searchvalueError, absentdeleteCapsuleIds, capsuleDeleteLimit, capsuledeletelimitError } from "../utils/constant.js"
 import {newcapsuleModal, getcapsulesortbyDatecreatedModal,getcapsulesearchModal, getcapsulesbyDatemodifiedModal,editcapsuleModal, getcapsulesortbysizeModal, deletebatchcapsulesModal } from "../models/capsuleModals.js"
 const mincharLimit = 2
 
@@ -61,6 +61,7 @@ export const getsearchCapsules = async(searchvalue,userid)=>{
 }
 export const batchdeleteCapsules = async(capsuleIds,userid)=>{
         if(!capsuleIds.length)return {status:badRequest,message:absentdeleteCapsuleIds}
+        if(capsuleIds.length > capsuleDeleteLimit)return {status:badRequest,message:capsuledeletelimitError}
         if(!userid)return {status:badRequest,message:useridAbsent}
         try {
             return deletebatchcapsulesModal(capsuleIds,userid)

@@ -1,11 +1,11 @@
-import database from "../database/dbConnection.js";
+import pool from "../database/dbConnection.js";
 import { getUserid, insertnewUser, insertuserSubscription_detail } from "../database/dbquery.js";
-import { internalserverError, serverError } from "../utils/constant.js";
+import { internalserverError, loginError } from "../utils/constant.js";
 import { AppError } from "../utils/error.js";
 
 
 const loginModal = async (email, username) => {
-  const client = await database()
+  const client = await pool.connect()
   try {
     await client.query('BEGIN');
     const insertedvalues = [email, username];
@@ -23,7 +23,10 @@ const loginModal = async (email, username) => {
   } catch (error) {
     await client.query('ROLLBACK');
     console.log(error);
-    throw new AppError({ status: internalserverError, message: serverError })
+    throw new AppError({ status: internalserverError, message: loginError })
+  }
+  finally{
+    client.release()
   }
 }
 export default loginModal;

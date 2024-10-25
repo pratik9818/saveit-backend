@@ -15,7 +15,7 @@ export const incrementcapsuleCount = 'update subscription_detail set capsule_cou
 export const searchcapsulesbyName = 'select * from capsules where is_deleted=false and user_id=$1 and capsule_name ilike $2'
 
 // export const deleteCapsules = 'delete from capsules where user_id=$1 and capsule_id = any($2)'
-export const deleteCapsules = 'update capsules set is_deleted = true where user_id=$1 and capsule_id= any($2)'
+export const deleteCapsules = 'update capsules set is_deleted = true where user_id=$1 and capsule_id= any($2) returning capsule_size'
 
 export const insertfragmentfile = 'insert into fragments (capsule_id,size,tag,url,fragment_type,file_name) values ($1, $2, $3, $4,$5,$6)';
 export const insertfragmenttext = 'insert into fragments (capsule_id,size,tag,fragment_type,text_content) values ($1, $2, $3, $4,$5)';
@@ -32,3 +32,4 @@ export const filterdocsfragments = 'select * from fragments where is_deleted=fal
 export const capsuleUpdatetime = 'update capsules set updated_at=$1 where capsule_id=$2';
 export const updatecapsuleSize = 'update capsules set capsule_size = capsule_size - $1 , updated_at=$2 where user_id=$3 and capsule_id=$4 returning capsule_size';
 export const decrementstorageUsed = 'update subscription_detail set storage_used = storage_used - $1 where user_id=$2';
+export const updatesubDetailOnDeleteCapsule = 'update subscription_detail set storage_used = storage_used - $1 , capsule_count_used = capsule_count_used - $2 where user_id=$3';

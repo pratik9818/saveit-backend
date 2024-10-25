@@ -5,6 +5,7 @@ export const tokenAbsent = 'Token is not persent !'
 export const googletokenAbsent = 'Google acess token is not persent !'
 export const invalidEmail = 'Email is not valid !'
 export const serverError = 'Something went wrong'
+export const loginError = 'Something went wrong while login'
 export const successfullylogin = 'Sucessfull login'
 export const dberror = 'Error in db connection'
 export const verifygoogletokenError = 'Error in verifying google token'
@@ -52,7 +53,9 @@ export const textcharlimitExceed = 'Text char limit exceed'
 export const downloadlimitExceed = 'download limit exceed'
 export const s3Url = 'https://s3.us-east-1.wasabisys.com'
 export const fragmentDeleteLimit = 40
+export const capsuleDeleteLimit = 20
 export const fragmentdeletelimitError = `Only ${fragmentDeleteLimit} fragment can be deleted at one time `
+export const capsuledeletelimitError = `Only ${capsuleDeleteLimit} capsule can be deleted at one time `
 
 export const tokenAge = 7776000
 // export const maxStorage = 10000 //this is max. storage any user can have even permium user -10gb

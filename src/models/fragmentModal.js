@@ -1,11 +1,11 @@
-import database from "../database/dbConnection.js";
+import pool from "../database/dbConnection.js";
 import { bucketName, datanotFound, downloadfileError, downloadlimitExceed, fragmentCreated, fragmentdeleteError, fragmentfilecreatedError, fragmentsdocsfilterError, fragmentsfilterError, fragmentssearchError, fragmenttagcreatedError, fragmenttextcreatedError, getfragmentsError, internalserverError, limitReached, notFound, resourceCreated, s3Url, success, successful, textupdatedError } from "../utils/constant.js";
 import { AppError } from "../utils/error.js";
 import convertbytestoMb from '../utils/bytestoMb.js'
 import { insertfragmentfile, incrementstorageUsed, updatecapsule, insertfragmenttext, getallFragments, updateTag, updateText, deleteFragments, incrementdownloadCount, searchfragments, filterfragments, filterdocsfragments, capsuleUpdatetime, updatecapsuleSize, decrementstorageUsed } from '../database/dbquery.js'
 export const filefragmentModal = async (capsuleid, size, tag, userid,filetype,filename) => {
 
-    const client = await database()
+    const client = await pool.connect();
     try {
         const sizeinMb = convertbytestoMb(size)
         const url = `${s3Url}/${bucketName}/${userid}/${filename}`
@@ -23,15 +23,16 @@ export const filefragmentModal = async (capsuleid, size, tag, userid,filetype,fi
             return { status: resourceCreated, message: fragmentCreated };
         }
     } catch (error) {
-        console.log(error);
-        
         await client.query('rollback')
         throw new AppError({ status: internalserverError, message: fragmentfilecreatedError })
+    }
+    finally{
+        client.release();
     }
 }
 export const textfragmentModal = async (capsuleid, size, tag, textcontent,userid) => {
 
-    const client = await database()
+    const client = await pool.connect()
     try {
         const sizeinMb = convertbytestoMb(size)
         
@@ -55,12 +56,15 @@ export const textfragmentModal = async (capsuleid, size, tag, textcontent,userid
         await client.query('rollback')
         throw new AppError({ status: internalserverError, message: fragmenttextcreatedError })
     }
+    finally{
+        client.release();
+    }
 }
 export const getfragmentModal = async (createdat, userid ,capsuleid) => {
 
-    const client = await database()
+    // const client = await database()
     try {
-        const res = await client.query(getallFragments, [capsuleid,createdat])
+        const res = await pool.query(getallFragments, [capsuleid,createdat])
         if(!res.rows.length)return { status: successful, message: success,data:null };
         return { status: successful, message: success,data:res.rows };
     } catch (error) {
@@ -69,7 +73,7 @@ export const getfragmentModal = async (createdat, userid ,capsuleid) => {
 }
 export const fragmenttagModal = async (tag,fragmentid) => {
 
-    const client = await database()
+    const client = await pool.connect()
     try {
         const updated_at = new Date()
          await client.query(updateTag, [tag,updated_at,fragmentid])
@@ -78,10 +82,13 @@ export const fragmenttagModal = async (tag,fragmentid) => {
     } catch (error) {
         throw new AppError({ status: internalserverError, message: fragmenttagcreatedError })
     }
+    finally{
+        client.release();
+    }
 }
 export const fragmenttextcontentModal = async (textcontent,fragmentid) => {
 
-    const client = await database()
+    const client = await pool.connect()
     try {
         const updated_at = new Date()
          await client.query(updateText, [textcontent,updated_at,fragmentid])
@@ -90,9 +97,12 @@ export const fragmenttextcontentModal = async (textcontent,fragmentid) => {
     } catch (error) {
         throw new AppError({ status: internalserverError, message: textupdatedError })
     }
+    finally{
+        client.release();
+    }
 }
 export const deletebatchfragmentModal = async(fragmentids,userid,capsuleid) =>{
-    const client = await database();
+    const client = await pool.connect()
     try {
         const updated_at = new Date()
         await client.query('begin')
@@ -110,12 +120,15 @@ export const deletebatchfragmentModal = async(fragmentids,userid,capsuleid) =>{
         await client.query('rollback')
         throw new AppError({ status: internalserverError, message: fragmentdeleteError })
     }
+    finally{
+        client.release();
+    }
 }
 export const downloadfilefragmentModal = async(fragmentid) =>{
-    const client = await database();
+    // const client = await database();
     try {
         
-            const res = await client.query(incrementdownloadCount,[fragmentid]);
+            const res = await pool.query(incrementdownloadCount,[fragmentid]);
             const {download_count} = res.rows[0];
             const freememberDownloadcount = 10
             if(download_count < freememberDownloadcount+1){
@@ -128,10 +141,10 @@ export const downloadfilefragmentModal = async(fragmentid) =>{
 }
 
 export const getfragmentssearchModal = async(searchvalue,capsuleid) =>{
-    const client = await database();
+    // const client = await database();
     try {
             const searchTerm = `%${searchvalue}%`;
-            const res = await client.query(searchfragments,[capsuleid,searchTerm]);
+            const res = await pool.query(searchfragments,[capsuleid,searchTerm]);
             if(!res.rows.length) return { status:notFound, message: datanotFound }
             return { status: successful, message: success , data:res.rows}
     } catch (error) {
@@ -139,9 +152,9 @@ export const getfragmentssearchModal = async(searchvalue,capsuleid) =>{
     }
 }
 export const fragmentsfilterModal = async(fragmenttype,capsuleid,createdat) =>{
-    const client = await database();
+    // const client = await database();
     try {
-            const res = await client.query(filterfragments,[capsuleid,fragmenttype ,createdat]);
+            const res = await pool.query(filterfragments,[capsuleid,fragmenttype ,createdat]);
             if(!res.rows.length) return { status:notFound, message: datanotFound }
             return { status: successful, message: success , data:res.rows}
     } catch (error) {
@@ -149,10 +162,10 @@ export const fragmentsfilterModal = async(fragmenttype,capsuleid,createdat) =>{
     }
 }
 export const fragmentsdocsfilterModal = async(capsuleid,createdat) =>{
-    const client = await database();
+    // const client = await database();
     try {
        
-            const res = await client.query(filterdocsfragments,[capsuleid,createdat,'text','video','image']);
+            const res = await pool.query(filterdocsfragments,[capsuleid,createdat,'text','video','image']);
             if(!res.rows.length) return { status:notFound, message: datanotFound }
             return { status: successful, message: success , data:res.rows}
     } catch (error) {
