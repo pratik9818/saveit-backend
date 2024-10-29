@@ -1,6 +1,7 @@
 import { editcapsuleName, getcaplsulesSortbyDatecreated,getcapsulesbyDatemodified, batchdeleteCapsules,getcaplsulesSortbySize, newCapsule,getsearchCapsules } from "../services/capsuleServices.js";
 
 export const createCapsule = async (req, res, next) => {
+    
     const capsuleName = req.body.capsuleName;
     const userId = req.user_id;
 
@@ -31,6 +32,8 @@ export const editCapsule = async(req,res,next)=>{
 export const getcapsules = async(req,res,next)=>{
     const dateModified = req.query.dateModified
     const userId = req.user_id
+    console.log(dateModified,userId);
+    
     try {
         const {status,message,data} = await getcapsulesbyDatemodified(dateModified,userId)
         res.status(status).json({

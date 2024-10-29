@@ -5,9 +5,9 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { internalserverError } from './src/utils/constant.js';
 const app = express()
-const port = 3001
+const port = 3000
 app.use(cors({
-    origin: 'http://localhost:5500',
+    origin: '*', // or specify your frontend origin
 }))
 app.use(express.json());
 app.use(cookieParser())
@@ -18,7 +18,7 @@ app.use((err,req,res,next)=>{
     console.error(err);
     res.status(err.status || internalserverError).json({
         status:'error',
-        message:err.message || 'internalserverError server error'
+        message:err.message || 'internal server error'
     })
 })
 app.listen(port , ()=>console.log(`listing at ${port}`))

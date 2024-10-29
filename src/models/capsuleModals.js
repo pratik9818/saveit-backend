@@ -25,13 +25,16 @@ export const newcapsuleModal = async (capsulename, userid) => {
             await client.query('rollback')
             return { status: limitReached, message: capsulelimitAlert }
         }
-        await client.query(insertCapsule, [userid, capsulename])
-        let count = capsule_count_used + 1
-        await client.query(incrementcapsuleCount, [count,userid])
+        const date = new Date().toUTCString()
+        await client.query(insertCapsule, [userid, capsulename,date])
+       
+        await client.query(incrementcapsuleCount, [1,userid])
         await client.query('commit')
         return { status: resourceCreated, message: capsuleCreated }
 
     } catch (error) {
+        console.log(error);
+        
         await client.query('rollback')
         throw new AppError({ status: internalserverError, message: capsuleCreatedError })
     }
