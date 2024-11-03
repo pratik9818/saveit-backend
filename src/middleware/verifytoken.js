@@ -6,9 +6,7 @@ dotenv.config()
 const secret_key = process.env.JWT_SECRET
 
 const verifyToken = (req,res,next) =>{
-    console.log('token');
     const token = req.cookies.accessToken
-    
     jwt.verify(token,secret_key , (err, decoded)=>{
         if(!token){
             throw new AppError({ status: badRequest ,error:tokenAbsent });

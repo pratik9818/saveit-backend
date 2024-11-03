@@ -48,13 +48,21 @@ delete / delete batch and detele single
 post /logout
 ******1. get only that data which is not markerd as delete -- done
     1. update at column must update when fragment insert and update -- done
-    2. when something delete capsule or fragment , need to also upate storeage , foldercount. -- fragment part updated
+    2. when something delete capsule or fragment , need to also upate storeage , foldercount. -- done
     3. textcontent length check in controller instead of this , char limmit nned to check in db
     4. need to think about delete , should i do real delete or fake - done
-    5. ******
-**INDEXING**-------------------------------**imp**
-**MULTIPLE DB CONNECTION**
-**DELETING THE CHILD ROW IF PARENT ROW DELETED** ---**IMP**
+    5.  impelmet connection pooling -- done
+    6.  making script deleting the fragment , capsules and objects.-------------done
+    7.  read access need to impelmet
+    8.  need to rewrite error handling in modal layer
+**INDEXING**-------------------------------**imp** ------------done
+**MULTIPLE DB CONNECTION** ------------------------------------done
+**DELETING THE CHILD ROW IF PARENT ROW DELETED** ---**IMP**----done
+**deletin objects in s3 on delete fragments/capsule** --------done
+**use docker for contairize node app and cicd**
+**learn and implent nginx for api limit ,cahcing etc**
 
-//whenevren some new fragemn created
-1. update sub detail - storage used , capsule size , reminder count , downloadcount
+
+
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////---------------------------------------- -->
+<!-- 1. update sub detail - storage used , capsule size , reminder count , downloadcount -->

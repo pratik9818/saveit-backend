@@ -2,7 +2,7 @@ import http from 'k6/http';
 import { sleep, check } from 'k6';
 
 export let options = {
-    vus: 10, // Virtual users
+    vus: 100, // Virtual users
     duration: '10s', // Test duration
 };
 
@@ -24,6 +24,7 @@ export let options = {
 
 //     sleep(1);
 // }
+
 // export default function () {
 //     const url = 'http://localhost:3000/api/v1/capsule/002d7a52-8ca3-4d72-81fd-c60d62ee763b';
 //     const headers = {
@@ -47,20 +48,37 @@ export let options = {
 //     sleep(1);
 // }
 
-export default function () {
-    const dateModified = new Date().toUTCString()
-    const url = `http://localhost:3000/api/v1/capsules?dateModified=${dateModified}`;
+export default function  () {
+    const dt = 'Tue, 29 Oct 2024 01:58:07 GMT'
+    const url = `http://localhost:3000/api/v1/capsules?dateModified=${dt}`;
     const headers = {
+        'Content-Type': 'application/json',
         'Cookie': 'accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYjNkZmU4YjQtNDk4ZS00OTA2LThhZjQtMDk0NDQ1NjUwYmI1IiwiaWF0IjoxNzI4MjAzNzAyLCJleHAiOjE3MzU5Nzk3MDJ9.1xzZ682A9jJKAys6yNlec9bT5oPTSMgSLReQTLgH5wQ;', // Example JWT token
     };
-
     const response = http.get(url,{ headers });
-    console.log(`Response status: ${response.status}`);
-    console.log(`Response body: ${response.body}`);
     check(response, {
-        'status is 201': (r) => r.status === 200,
+        'status is 200': (r) => r.status === 200,
         'response time is less than 1s': (r) => r.timings.duration < 1000,
     }); 
 
     sleep(1);
 }
+
+
+// export default function () {
+//     const dt = '2024-10-29 15:53:19.987425'
+//     const url = `http://localhost:3000/api/v1/capsules/filter/date?order=desc&&date=${dt}`;
+//     const headers = {
+//          'Content-Type': 'application/json',
+//         'Cookie': 'accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYjNkZmU4YjQtNDk4ZS00OTA2LThhZjQtMDk0NDQ1NjUwYmI1IiwiaWF0IjoxNzI4MjAzNzAyLCJleHAiOjE3MzU5Nzk3MDJ9.1xzZ682A9jJKAys6yNlec9bT5oPTSMgSLReQTLgH5wQ;', // Example JWT token
+//     };
+
+//     const response = http.get(url,{ headers });
+//     console.log(`Response status: ${response.status}`);
+//     check(response, {
+//         'status is 201': (r) => r.status === 200,
+//         'response time is less than 1s': (r) => r.timings.duration < 1000,
+//     }); 
+
+//     sleep(1);
+// }
