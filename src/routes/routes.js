@@ -9,6 +9,7 @@ import { fileFragment ,textFragment ,getFragments,fragmentTag ,updatetextContent
 const router = express.Router()
 
 router.post('/auth/google',verifygoogleToken,authController)
+// router.post('/subscriptiondetails',verifygoogleToken,subscriptiondetailsController)
 router.post('/capsules',verifyToken ,createCapsule)
 router.put('/capsule/:capsuleid',verifyToken,editCapsule)
 router.get('/capsules',verifyToken, getcapsules)

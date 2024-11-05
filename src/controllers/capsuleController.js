@@ -32,7 +32,6 @@ export const editCapsule = async(req,res,next)=>{
 export const getcapsules = async(req,res,next)=>{
     const dateModified = req.query.dateModified
     const userId = req.user_id
-    conole.log(dateModified)
     try {
         const {status,message,data} = await getcapsulesbyDatemodified(dateModified,userId)
         res.status(status).json({

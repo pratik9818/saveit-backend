@@ -6,7 +6,7 @@ import { successfullylogin, tokenAge } from '../utils/constant.js';
     try {
         const {jwttoken,message,newuser,status} = await authService(email,username)
         
-        res.cookie('accessToken', jwttoken , {httpOnly:true,secure:true,sameSite:'strict',maxAge:tokenAge})
+        res.cookie('accessToken', jwttoken , {httpOnly:true,secure:false,sameSite:'Lax',maxAge:tokenAge})
         res.status(status).json({
             message:message,
             isuserNew : newuser
