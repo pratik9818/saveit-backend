@@ -23,14 +23,15 @@ export const newcapsuleModal = async (capsulename, userid) => {
         
         if (capsule_count_used > capsule_count) {
             await client.query('rollback')
-            return { status: limitReached, message: capsulelimitAlert }
+            return { status: limitReached, message: capsulelimitAlert ,capsuleId:null }
         }
         const date = new Date().toUTCString()
-        await client.query(insertCapsule, [userid, capsulename,date])
+       const res =  await client.query(insertCapsule, [userid, capsulename,date])
        
-        await client.query(incrementcapsuleCount, [1,userid])
+       await client.query(incrementcapsuleCount, [1,userid])
+       
         await client.query('commit')
-        return { status: resourceCreated, message: capsuleCreated }
+        return { status: resourceCreated, message: capsuleCreated ,capsuleId:res.rows[0].capsule_id}
 
     } catch (error) {
         console.log(error);

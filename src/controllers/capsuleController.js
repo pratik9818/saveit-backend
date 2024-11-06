@@ -6,9 +6,10 @@ export const createCapsule = async (req, res, next) => {
     const userId = req.user_id;
 
     try {
-        const {status,message} = await newCapsule(capsuleName, userId)
+        const {status,message,capsuleId} = await newCapsule(capsuleName, userId)
         res.status(status).json({
             message: message,
+            capsule_id:capsuleId
         })
     } catch (error) {
         next({ status: error.status, message: error.message })
