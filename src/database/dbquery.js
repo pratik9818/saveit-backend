@@ -8,7 +8,7 @@ export const getCapsulesInDescOrder = 'select * from capsules where user_id=$1 a
 export const getCapsulesInAscOrder = 'select * from capsules where user_id=$1 and created_at <= $2 and is_deleted=false order by created_at asc limit 10'
 export const getCapsulessortbySizeInAsc = 'select * from capsules where user_id=$1 and capsule_size <= $2 and is_deleted=false order by capsule_size asc limit 10'
 export const getCapsulessortbySizeInDesc = 'select * from capsules where user_id=$1 and capsule_size <= $2 and is_deleted=false order by capsule_size desc limit 10'
-export const getcaplsulesbyDatemodified = 'select * from capsules where user_id=$1 and updated_at <= $2 and is_deleted=false order by updated_at desc limit 10'
+export const getcaplsulesbyDatemodified = 'select * from capsules where user_id=$1 and updated_at < $2 and is_deleted=false order by updated_at desc limit 12'
 
 export const incrementcapsuleCount = 'update subscription_detail set capsule_count_used = capsule_count_used + $1 where user_id=$2'
 

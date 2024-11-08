@@ -75,8 +75,8 @@ CREATE TABLE reminder (
                 REFERENCES users(user_id),
             capsule_name VARCHAR(50) NULL,
             capsule_size REAL NOT NULL DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TEXT NULL,
+            created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMPTZ NULL,
             is_deleted BOOLEAN DEFAULT FALSE
         )
     `
