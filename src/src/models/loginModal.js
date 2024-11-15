@@ -14,12 +14,12 @@ const loginModal = async (email, username) => {
       const user_id = res.rows[0].user_id
       await client.query(insertuserSubscription_detail, [1, user_id])
       client.query('COMMIT')
-      return { user_id: user_id, message: true, status: 201 }
+      return { user_id:user_id, message: 'New user created', newuser: true, status: 201 }
     }
 
     const selectres = await client.query(getUserid, [email]);
     await client.query('COMMIT');
-    return { user_id: selectres.rows[0].user_id, message: false, status: 200 };
+    return { user_id:selectres.rows[0].user_id,message: 'Sucessfull login', newuser: false, status: 200 };
   } catch (error) {
     await client.query('ROLLBACK');
     console.log(error);

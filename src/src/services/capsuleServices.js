@@ -1,10 +1,9 @@
 import { AppError } from "../utils/error.js"
 import { badRequest, capsulenameerror,capsuleiderror, dateError, orderMissing, capsulessizeError, useridAbsent, searchvalueError, absentdeleteCapsuleIds, capsuleDeleteLimit, capsuledeletelimitError } from "../utils/constant.js"
 import {newcapsuleModal, getcapsulesortbyDatecreatedModal,getcapsulesearchModal, getcapsulesbyDatemodifiedModal,editcapsuleModal, getcapsulesortbysizeModal, deletebatchcapsulesModal } from "../models/capsuleModals.js"
-const mincharLimit = 2
 
 export const newCapsule = async (capsulename, userid) => {
-    if (!capsulename || capsulename.length < mincharLimit) return {status:badRequest,message:capsulenameerror}
+    if (!capsulename.length ) return {status:badRequest,message:capsulenameerror}
    try {
     return await newcapsuleModal(capsulename, userid)
    } catch (error) {
@@ -12,7 +11,7 @@ export const newCapsule = async (capsulename, userid) => {
    }
 }
 export const editcapsuleName = async(capsulename,capsuleid,userid)=>{
-    if (!capsulename || capsulename.length < mincharLimit) return {status:badRequest,message:capsulenameerror}
+    if (!capsulename.length) return {status:badRequest,message:capsulenameerror}
     if(!capsuleid) return {status:badRequest,message:capsuleiderror}
     if(!userid)return {status:badRequest,message:useridAbsent}
     try {

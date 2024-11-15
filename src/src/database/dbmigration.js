@@ -61,7 +61,7 @@ CREATE TABLE reminder (
     fragment_id UUID NOT NULL,
         CONSTRAINT fk_fragment_id FOREIGN KEY(fragment_id)
             REFERENCES fragment(fragment_id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TEXT NOT NULL,
     is_enable BOOLEAN DEFAULT FALSE,
     reminder_time TEXT NULL
@@ -75,8 +75,8 @@ CREATE TABLE reminder (
                 REFERENCES users(user_id),
             capsule_name VARCHAR(50) NULL,
             capsule_size REAL NOT NULL DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TEXT NULL,
+            created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMPTZ NULL,
             is_deleted BOOLEAN DEFAULT FALSE
         )
     `
@@ -86,7 +86,7 @@ CREATE TABLE reminder (
             fragment_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             capsule_id UUID NOT NULL,
             CONSTRAINT fk_capsule FOREIGN KEY(capsule_id)
-                REFERENCES capsule(capsule_id),
+                REFERENCES capsule(capsule_id) on delete cascade,
             size INT NOT NULL,
             fragment_type TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -106,6 +106,11 @@ CREATE TABLE reminder (
     // await client.query(subscriptiontable)
     // await client.query(capsuletable)
     // await client.query(fragmenttable)
+
+    ///indexinng
+    // reate index capsule_index on capsules (user_id, created_at)
+    // -- create index fragment_index on fragments (capsule_id, created_at)
+    
     await client.query(remindertable)
     console.log("Table created successfully!");
 }

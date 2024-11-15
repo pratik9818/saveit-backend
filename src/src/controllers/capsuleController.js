@@ -1,13 +1,15 @@
 import { editcapsuleName, getcaplsulesSortbyDatecreated,getcapsulesbyDatemodified, batchdeleteCapsules,getcaplsulesSortbySize, newCapsule,getsearchCapsules } from "../services/capsuleServices.js";
 
 export const createCapsule = async (req, res, next) => {
+    
     const capsuleName = req.body.capsuleName;
     const userId = req.user_id;
 
     try {
-        const {status,message} = await newCapsule(capsuleName, userId)
+        const {status,message,capsuleId} = await newCapsule(capsuleName, userId)
         res.status(status).json({
             message: message,
+            capsule_id:capsuleId
         })
     } catch (error) {
         next({ status: error.status, message: error.message })
@@ -73,6 +75,10 @@ export const sortcapsulesbySize = async(req,res,next)=>{
 export const searchCapsules = async(req,res,next)=>{
     const searchValue = req.query.searchValue;
     const userId = req.user_id;
+    console.log(searchValue);
+    console.log(userId);
+    
+    
     try {
         const {status,message,data} = await getsearchCapsules(searchValue,userId)
         res.status(status).json({
@@ -85,6 +91,8 @@ export const searchCapsules = async(req,res,next)=>{
 }
 export const deleteCapsules = async(req,res,next)=>{
     const {capsuleIds} = req.body;
+    console.log(req.body);
+    
     const userId = req.user_id;
     try {
         const {status,message,rowdelete} = await batchdeleteCapsules(capsuleIds,userId)
