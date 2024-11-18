@@ -89,7 +89,7 @@ CREATE TABLE reminder (
                 REFERENCES capsule(capsule_id) on delete cascade,
             size INT NOT NULL,
             fragment_type TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            created_at NOT NULL TIMESTAMPZ DEFAULT CURRENT_TIMESTAMP,
             updated_at TEXT NULL,
             tag VARCHAR(100) NULL,
             reminder BOOLEAN DEFAULT FALSE,

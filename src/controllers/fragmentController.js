@@ -5,10 +5,11 @@ export const fileFragment = async(req,res,next)=>{
     const {capsuleId ,size,tag ,fileType,fileName} = req.body;
     
     try {
-        const {status,message} = await filefragmentService(capsuleId ,size,tag,userId,fileType,fileName)
+        const {status,message,data} = await filefragmentService(capsuleId ,size,tag,userId,fileType,fileName)
         
         res.status(status).json({
             message: message,
+            data:data
         })
     } catch (error) {
         next({ status: error.status, message: error.message })
@@ -21,10 +22,11 @@ export const textFragment = async(req,res,next)=>{
     const {capsuleId ,tag , textContent} = req.body;
     
     try {
-        const {status,message} = await textfragmentService(capsuleId ,size,tag,textContent,userId)
+        const {status,message,data} = await textfragmentService(capsuleId ,size,tag,textContent,userId)
         
         res.status(status).json({
             message: message,
+            data:data
         })
     } catch (error) {
         next({ status: error.status, message: error.message })

@@ -20,7 +20,7 @@ export const filefragmentModal = async (capsuleid, size, tag, userid,filetype,fi
             await Promise.all([res2, res3])
             await client.query('commit')
             
-            return { status: resourceCreated, message: fragmentCreated };
+            return { status: resourceCreated, message: fragmentCreated , data:res.rows[0] };
         }
     } catch (error) {
         await client.query('rollback')
@@ -40,6 +40,7 @@ export const textfragmentModal = async (capsuleid, size, tag, textcontent,userid
         const values = [capsuleid, sizeinMb, tag,fragment_type,textcontent]
         await client.query('begin')
         const res = await client.query(insertfragmenttext, values)
+        
         if (res) {
             const updated_at = new Date()
             
@@ -48,7 +49,7 @@ export const textfragmentModal = async (capsuleid, size, tag, textcontent,userid
             await Promise.all([res2, res3])
             await client.query('commit')
             
-            return { status: resourceCreated, message: fragmentCreated };
+            return { status: resourceCreated, message: fragmentCreated, data:res.rows[0] };
         }
     } catch (error) {
         console.log(error);
@@ -65,7 +66,7 @@ export const getfragmentModal = async (createdat, userid ,capsuleid) => {
     // const client = await database()
     try {
         const res = await pool.query(getallFragments, [capsuleid,createdat])
-        if(!res.rows.length)return { status: successful, message: success,data:null };
+        if(!res.rows.length)return { status: notFound, message: success,data:null };
         return { status: successful, message: success,data:res.rows };
     } catch (error) {
         throw new AppError({ status: internalserverError, message: getfragmentsError })

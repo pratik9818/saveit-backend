@@ -58,17 +58,29 @@ export const getcapsulesbyDatemodifiedModal = async(datemodified,userid) =>{
 }
 export const getcapsulesortbyDatecreatedModal = async(order,date,userid) =>{
     // const client = await database();
+    
     try {
         if(order === 'asc'){
+            console.log(date);
+            
             const res = await pool.query(getCapsulesInAscOrder,[userid,date]);
+            // console.log('in asc');
+            // console.log(res);
+            
+            
             if(!res.rows.length) return { status:notFound, message: datanotFound }
             return { status: successful, message: success , data:res.rows}
         }else if(order === 'desc'){
             const res = await pool.query(getCapsulesInDescOrder,[userid,date]);
+            // console.log('in desc');
+            // console.log(res);
+            
             if(!res.rows.length) return { status:notFound, message: datanotFound }
             return { status: successful, message: success , data:res.rows}
         }
     } catch (error) {
+        console.log(error);
+        
         throw new AppError({ status: internalserverError, message: capsulesortbydatecreatedError })
     }
 }
