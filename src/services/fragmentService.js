@@ -35,9 +35,9 @@ export const getFragmentsService = async (createdat, userid ,capsuleid) => {
         throw new AppError({ status: error.status, message: error.message })
     }
 }
-export const fragmenttagService = async (tag,fragmentid,userid) => {
+export const fragmenttagService = async (tag,fragmentid,userid,capsuleid) => {
     if (!userid) return { status: badRequest, message: useridAbsent }
-    if (!tag || !fragmentid) return { status: badRequest, message: missingkey }
+    if (!tag || !fragmentid || !capsuleid) return { status: badRequest, message: missingkey }
     if(tag.length > tagcharLimit) return { status: badRequest, message: tagcharError }
     try {
         return await fragmenttagModal(tag,fragmentid)
@@ -45,13 +45,13 @@ export const fragmenttagService = async (tag,fragmentid,userid) => {
         throw new AppError({ status: error.status, message: error.message })
     }
 }
-export const updatetextcontentService = async (textcontent,fragmentid,userid) => {
+export const updatetextcontentService = async (textcontent,fragmentid,userid,capsuleid) => {
     if (!userid) return { status: badRequest, message: useridAbsent }
-    if (!textcontent || !fragmentid) return { status: badRequest, message: missingkey }
+    if (!textcontent || !fragmentid || !capsuleid) return { status: badRequest, message: missingkey }
     const textcharLength = textcontent.length;
     if (textcharLimit < textcharLength ) return { status: badRequest, message: textcharlimitExceed }
     try {
-        return await fragmenttextcontentModal(textcontent,fragmentid)
+        return await fragmenttextcontentModal(textcontent,fragmentid,capsuleid)
     } catch (error) {
         throw new AppError({ status: error.status, message: error.message })
     }

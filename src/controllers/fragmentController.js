@@ -51,10 +51,10 @@ export const getFragments = async(req,res,next)=>{
 }
 export const fragmentTag = async(req,res,next)=>{
     const userId = req.user_id;
-    const {tag,fragmentId} = req.body;
+    const {tag,fragmentId,capsuleId} = req.body;
     
     try {
-        const {status,message} = await fragmenttagService(tag,fragmentId,userId)
+        const {status,message} = await fragmenttagService(tag,fragmentId,userId,capsuleId)
         
         res.status(status).json({
             message: message,
@@ -65,10 +65,10 @@ export const fragmentTag = async(req,res,next)=>{
 }
 export const updatetextContent = async(req,res,next)=>{
     const userId = req.user_id;
-    const {textContent,fragmentId} = req.body;
+    const {textContent,fragmentId ,capsuleId} = req.body;
     
     try {
-        const {status,message} = await updatetextcontentService(textContent,fragmentId,userId)
+        const {status,message} = await updatetextcontentService(textContent,fragmentId,userId,capsuleId)
         
         res.status(status).json({
             message: message,

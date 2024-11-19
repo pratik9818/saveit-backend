@@ -72,13 +72,15 @@ export const getfragmentModal = async (createdat, userid ,capsuleid) => {
         throw new AppError({ status: internalserverError, message: getfragmentsError })
     }
 }
-export const fragmenttagModal = async (tag,fragmentid) => {
+export const fragmenttagModal = async (tag,fragmentid,capsuleid) => {
 
     const client = await pool.connect()
     try {
         const updated_at = new Date()
-         await client.query(updateTag, [tag,updated_at,fragmentid])
-         await client.query(capsuleUpdatetime, [updated_at,capsuleid])
+       await client.query(updateTag, [tag,updated_at,fragmentid])
+         const res = await client.query(capsuleUpdatetime, [updated_at,capsuleid])
+        console.log(res);
+        
         return { status: successful, message: success};
     } catch (error) {
         throw new AppError({ status: internalserverError, message: fragmenttagcreatedError })
@@ -87,7 +89,7 @@ export const fragmenttagModal = async (tag,fragmentid) => {
         client.release();
     }
 }
-export const fragmenttextcontentModal = async (textcontent,fragmentid) => {
+export const fragmenttextcontentModal = async (textcontent,fragmentid,capsuleid) => {
 
     const client = await pool.connect()
     try {
