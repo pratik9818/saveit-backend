@@ -78,8 +78,7 @@ export const fragmenttagModal = async (tag,fragmentid,capsuleid) => {
     try {
         const updated_at = new Date()
        await client.query(updateTag, [tag,updated_at,fragmentid])
-         const res = await client.query(capsuleUpdatetime, [updated_at,capsuleid])
-        console.log(res);
+        await client.query(capsuleUpdatetime, [updated_at,capsuleid])
         
         return { status: successful, message: success};
     } catch (error) {
@@ -93,6 +92,7 @@ export const fragmenttextcontentModal = async (textcontent,fragmentid,capsuleid)
 
     const client = await pool.connect()
     try {
+        //ALERT ---------HUGE BUG HERE ------ FORGET TO CALCULATE SIZE OF TEXT AFTER UPDATING THE TEXT CONTENT. NEED TO FIX IT
         const updated_at = new Date()
          await client.query(updateText, [textcontent,updated_at,fragmentid])
          await client.query(capsuleUpdatetime, [updated_at,capsuleid])
