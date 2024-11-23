@@ -23,7 +23,7 @@ export const incrementstorageUsed = 'update subscription_detail set storage_used
 export const updatecapsule = 'update capsules set capsule_size = capsule_size + $1 , updated_at=$2 where capsule_id=$4 and user_id=$3';
 export const getallFragments = 'select * from fragments where capsule_id=$1 and created_at < $2 and is_deleted=false order by created_at desc limit 7'
 export const updateTag = 'update fragments set tag = $1 , updated_at=$2 where fragment_id=$3';
-export const updateText = 'update fragments set text_content = $1 , updated_at=$2 where fragment_id=$3';
+export const updateText = 'update fragments set text_content = $1 , updated_at=$2 , size=$3 where fragment_id=$4';
 export const deleteFragments = 'update fragments set is_deleted = true where fragment_id= any($1) returning size'
 export const incrementdownloadCount = 'update fragments set download_count = case when download_count < (select download_per_fragment_count from subscription_type where subscription_type_id = 1) then download_count + 1 else download_count end where fragment_id = $1 returning download_count'
 export const searchfragments = 'select * from fragments where capsule_id=$1 and (tag ilike $2 or file_name ilike $2 or text_content ilike $2) and is_deleted=false limit 50' //it could be ux problem

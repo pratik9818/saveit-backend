@@ -75,10 +75,6 @@ export const sortcapsulesbySize = async(req,res,next)=>{
 export const searchCapsules = async(req,res,next)=>{
     const searchValue = req.query.searchValue;
     const userId = req.user_id;
-    console.log(searchValue);
-    console.log(userId);
-    
-    
     try {
         const {status,message,data} = await getsearchCapsules(searchValue,userId)
         res.status(status).json({
@@ -91,8 +87,6 @@ export const searchCapsules = async(req,res,next)=>{
 }
 export const deleteCapsules = async(req,res,next)=>{
     const {capsuleIds} = req.body;
-    console.log(req.body);
-    
     const userId = req.user_id;
     try {
         const {status,message,rowdelete} = await batchdeleteCapsules(capsuleIds,userId)

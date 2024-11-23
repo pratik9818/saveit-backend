@@ -1,5 +1,5 @@
 import pool from "../database/dbConnection.js";
-import { bucketName, datanotFound, downloadfileError, downloadlimitExceed, fragmentCreated, fragmentdeleteError, fragmentfilecreatedError, fragmentsdocsfilterError, fragmentsfilterError, fragmentssearchError, fragmenttagcreatedError, fragmenttextcreatedError, getfragmentsError, internalserverError, limitReached, notFound, resourceCreated, s3Url, success, successful, textupdatedError } from "../utils/constant.js";
+import { bucketName, datanotFound, downloadfileError, downloadlimitExceed, fragmentCreated, fragmentdeleteError, fragmentfilecreatedError, fragmentsdocsfilterError, fragmentsfilterError, fragmentssearchError, fragmenttagcreatedError, fragmenttextcreatedError, getfragmentsError, internalserverError, limitReached, notFound, resourceCreated, s3Url, success, successful, textupdatedError, updateMessage } from "../utils/constant.js";
 import { AppError } from "../utils/error.js";
 import convertbytestoMb from '../utils/bytestoMb.js'
 import { insertfragmentfile, incrementstorageUsed, updatecapsule, insertfragmenttext, getallFragments, updateTag, updateText, deleteFragments, incrementdownloadCount, searchfragments, filterfragments, filterdocsfragments, capsuleUpdatetime, updatecapsuleSize, decrementstorageUsed } from '../database/dbquery.js'
@@ -66,7 +66,7 @@ export const getfragmentModal = async (createdat, userid ,capsuleid) => {
     // const client = await database()
     try {
         const res = await pool.query(getallFragments, [capsuleid,createdat])
-        if(!res.rows.length)return { status: notFound, message: success,data:null };
+        if(!res.rows.length)return { status: notFound, message: datanotFound,data:null };
         return { status: successful, message: success,data:res.rows };
     } catch (error) {
         throw new AppError({ status: internalserverError, message: getfragmentsError })
@@ -80,7 +80,7 @@ export const fragmenttagModal = async (tag,fragmentid,capsuleid) => {
        await client.query(updateTag, [tag,updated_at,fragmentid])
         await client.query(capsuleUpdatetime, [updated_at,capsuleid])
         
-        return { status: successful, message: success};
+        return { status: successful, message: updateMessage};
     } catch (error) {
         throw new AppError({ status: internalserverError, message: fragmenttagcreatedError })
     }
@@ -88,16 +88,21 @@ export const fragmenttagModal = async (tag,fragmentid,capsuleid) => {
         client.release();
     }
 }
-export const fragmenttextcontentModal = async (textcontent,fragmentid,capsuleid) => {
+export const fragmenttextcontentModal = async (textcontent,fragmentid,capsuleid,size,userid) => {
 
     const client = await pool.connect()
     try {
-        //ALERT ---------HUGE BUG HERE ------ FORGET TO CALCULATE SIZE OF TEXT AFTER UPDATING THE TEXT CONTENT. NEED TO FIX IT
+        const sizeinMb = convertbytestoMb(size)
+        await client.query('begin')
+        //ALERT -- WHEN I UPDATEING THE STORAGE SIZE, I DO NOT MINUS THE STORAGE SIZE FIRST OF OLD TEXT . I JUST ADD THE NEW SIZE OF UPDATE TEXT IN STORAGE COLUMN ALTHOUGH IT NOT EFFECT TOO MUCH IN SIZE OF STORAGE
         const updated_at = new Date()
-         await client.query(updateText, [textcontent,updated_at,fragmentid])
-         await client.query(capsuleUpdatetime, [updated_at,capsuleid])
-        return { status: successful, message: success};
+         await client.query(updateText, [textcontent,updated_at,sizeinMb,fragmentid])
+         await client.query(incrementstorageUsed, [sizeinMb, userid])
+         await client.query(updatecapsule, [sizeinMb,updated_at, userid,capsuleid])
+         await client.query('commit')
+        return { status: successful, message: updateMessage};
     } catch (error) {
+        await client.query('rollback')
         throw new AppError({ status: internalserverError, message: textupdatedError })
     }
     finally{

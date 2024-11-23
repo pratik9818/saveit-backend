@@ -45,13 +45,13 @@ export const fragmenttagService = async (tag,fragmentid,userid,capsuleid) => {
         throw new AppError({ status: error.status, message: error.message })
     }
 }
-export const updatetextcontentService = async (textcontent,fragmentid,userid,capsuleid) => {
+export const updatetextcontentService = async (textcontent,fragmentid,userid,capsuleid,size) => {
     if (!userid) return { status: badRequest, message: useridAbsent }
-    if (!textcontent || !fragmentid || !capsuleid) return { status: badRequest, message: missingkey }
+    if (!textcontent || !fragmentid || !capsuleid || !size) return { status: badRequest, message: missingkey }
     const textcharLength = textcontent.length;
     if (textcharLimit < textcharLength ) return { status: badRequest, message: textcharlimitExceed }
     try {
-        return await fragmenttextcontentModal(textcontent,fragmentid,capsuleid)
+        return await fragmenttextcontentModal(textcontent,fragmentid,capsuleid,size,userid)
     } catch (error) {
         throw new AppError({ status: error.status, message: error.message })
     }

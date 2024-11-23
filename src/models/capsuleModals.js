@@ -61,7 +61,6 @@ export const getcapsulesortbyDatecreatedModal = async(order,date,userid) =>{
     
     try {
         if(order === 'asc'){
-            console.log(date);
             
             const res = await pool.query(getCapsulesInAscOrder,[userid,date]);
             // console.log('in asc');

@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 import { AppError } from "../utils/error.js";
 dotenv.config()
 export const authService = async(email,username)=>{
-        if (!email || !username) throw new AppError({ status: badRequest, message: invalidEmail })
+        if (!email || !username) return({ status: badRequest, message: invalidEmail })
        try {
         const {user_id, message,newuser , status} = await loginModal(email,username)
         const jwttoken =  generateToken(user_id);
@@ -13,5 +13,4 @@ export const authService = async(email,username)=>{
        } catch (error) {
         throw new AppError({status:error.status,message:error.message})
        }
-
 }
