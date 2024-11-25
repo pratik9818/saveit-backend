@@ -19,10 +19,3 @@ export const uploadpresignedurlModal = async (userid,fileName) => {
 
 }
 
-
-
-  
-
-// access-key= OSL58976EMG1NF22MQFZ
-// secret-key= tSrgJms88OMqn8CM2M4SDGGSXmUDKO3h59lk5BAQ
-//need to figure  our how user get access only its object

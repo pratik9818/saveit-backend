@@ -17,7 +17,7 @@ export const generateuploadpresignedUrl = async (bucketname, filename,userid) =>
       Bucket: bucketname,
       Key: `${userid}/${filename}`,  // The path where the file will be stored (e.g., 'user-files/file.jpg')
       Expires: presignedurlExpire,  // URL expiration time in seconds (5 minutes in this case)
-      ContentType: 'application/json'  // You can specify the file's content type
+      ContentType: 'application/octet-stream'  // You can specify the file's content type
     };
   
     try {
