@@ -1,5 +1,7 @@
-export const insertnewUser = `insert into users (email ,user_name) values ($1,$2) on conflict (email) do nothing returning user_id`
+export const insertnewUser = `insert into users (email ,user_name,is_login) values ($1,$2,$3) on conflict (email) do nothing returning user_id`
 export const getUserid = `select user_id from users where email=$1`
+export const updateLogin = `update users set is_login=$2 where email=$1 returning user_id`
+export const logout = `update users set is_login=$1 where user_id = $2`
 export const insertuserSubscription_detail = `insert into subscription_detail (subscription_type_id,user_id) values($1,$2)`
 export const getuserSubcriptionDetail = 'select sd.* , st.* from subscription_detail sd inner join subscription_type st on sd.subscription_type_id = st.subscription_type_id where sd.user_id=$1'
 export const insertCapsule = 'insert into capsules (user_id,capsule_name,updated_at) values ($1,$2,$3) returning capsule_id'
