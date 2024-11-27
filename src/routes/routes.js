@@ -7,6 +7,7 @@ import { uploadPresignedurl } from '../controllers/presignedurlController.js'
 import fileValidator from '../middleware/fileValidator.js'
 import { fileFragment ,textFragment ,getFragments,fragmentTag ,updatetextContent,deleteFragments,downloadFile,searchFragments,filterFragments,filterdocsFragments} from '../controllers/fragmentController.js'
 import logoutController from '../controllers/logoutController.js'
+import feedbackController from '../controllers/feedbackController.js'
 const router = express.Router()
 
 router.post('/auth/google',verifygoogleToken,authController)
@@ -32,4 +33,5 @@ router.get('/fragments/search',verifyToken,searchFragments)
 router.get('/fragments/filter/:filtertype',verifyToken,filterFragments)
 router.get('/fragments/filter/other/docs',verifyToken,filterdocsFragments)
 
+router.post('/feedback',verifyToken, feedbackController)
 export default router

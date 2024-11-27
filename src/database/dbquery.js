@@ -35,3 +35,4 @@ export const capsuleUpdatetime = 'update capsules set updated_at=$1 where capsul
 export const updatecapsuleSize = 'update capsules set capsule_size = capsule_size - $1 , updated_at=$2 where user_id=$3 and capsule_id=$4 returning capsule_size';
 export const decrementstorageUsed = 'update subscription_detail set storage_used = storage_used - $1 where user_id=$2';
 export const updatesubDetailOnDeleteCapsule = 'update subscription_detail set storage_used = storage_used - $1 , capsule_count_used = capsule_count_used - $2 where user_id=$3';
+export const feedbackquery = 'insert into feedback (bugs,features,improvements,suggestions,user_id) values($1,$2,$3,$4,$5)';

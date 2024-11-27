@@ -1,5 +1,6 @@
 export const useridAbsent = 'User id is not persent ! Please login again'
 export const absentdeleteCapsuleIds = 'Capsule id is necssary to delete any capsule !'
+export const absentFeedbackField = 'You have to fill min one field !'
 export const absentdeleteFragmentsIds = 'Fragment id is necssary to delete any fragment !'
 export const tokenAbsent = 'Token is not persent !'
 export const googletokenAbsent = 'Google acess token is not persent !'
@@ -53,13 +54,16 @@ export const missingkey = 'missing key'
 export const textcharlimitExceed = 'Text char limit exceed'
 export const logoutSucessfully = 'Logout !'
 export const logoutError = 'Something went wrong while logout !'
+export const feedbackError = 'Something went wrong while giveing feedback !'
 export const downloadlimitExceed = 'download limit exceed'
+export const feedbackMessage = 'Thank you for your feedback !'
 export const s3Url = 'https://s3.us-east-1.wasabisys.com'
 export const fragmentDeleteLimit = 40
 export const capsuleDeleteLimit = 20
 export const fragmentdeletelimitError = `Only ${fragmentDeleteLimit} fragment can be deleted at one time `
 export const capsuledeletelimitError = `Only ${capsuleDeleteLimit} capsule can be deleted at one time `
-
+export const feedbackCharLimit = 500
+export const feedbackCharLimitError = 'Max 500 char in each field'
 export const tokenAge = 7776000000 //in milisecond //// 3600 * 24 * 90 - 3 month expiration time
 // export const maxStorage = 10000 //this is max. storage any user can have even permium user -10gb
 export const uploadLimit = 10 //in mb

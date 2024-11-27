@@ -100,12 +100,23 @@ CREATE TABLE reminder (
              is_deleted BOOLEAN DEFAULT FALSE
             )
 `
+const feedback = `CREATE TABLE feedback (
+    id SERIAL PRIMARY KEY,               
+    user_id UUID NOT NULL,                 
+    bugs TEXT,                           
+    features TEXT,                       
+    improvements TEXT,                   
+    suggestions TEXT,                    
+    created_at TIMESTAMP DEFAULT NOW()   
+)`;
+
     // const deltetable = `DROP TABLE notes `
     // await client.query(usertable)
     // await client.query(plansdetailstable)
     // await client.query(subscriptiontable)
     // await client.query(capsuletable)
     // await client.query(fragmenttable)
+    // await client.query(feedback)
 
     ///indexinng
     // reate index capsule_index on capsules (user_id, created_at)
