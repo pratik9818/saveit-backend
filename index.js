@@ -7,7 +7,7 @@ import { internalserverError } from './src/utils/constant.js';
 const app = express()
 const port = 3000
 app.use(cors({
-    origin: 'http://localhost:5500', // or specify your frontend origin
+    origin: 'http://saveit.tech', // or specify your frontend origin
     credentials: true,
 }))
 // app.options('*', (req, res) => {
@@ -25,9 +25,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/v1',userRoutes)
 app.use((err,req,res,next)=>{
     console.error(err);
-    res.status(err.status || internalserverError).json({
-        status:'error',
-        message:err.message || 'internal server error'
-    })
+    const status = err.status || 500; // Default to 500 if no status is provided
+    const message = err.message || 'Internal server error';
+    res.status(status).json({
+        status: status,  // HTTP status code (400, 500, etc.)
+        message: message, // Error message
+    });
 })
-app.listen(port , ()=>console.log(`listing at ${port}`))
+app.listen(port, ()=>console.log(`listing at ${port}`))
