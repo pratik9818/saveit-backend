@@ -1,5 +1,5 @@
 import pool from "../database/dbConnection.js";
-import { bucketName, datanotFound, downloadfileError, downloadlimitExceed, fragmentCreated, fragmentdeleteError, fragmentfilecreatedError, fragmentsdocsfilterError, fragmentsfilterError, fragmentssearchError, fragmenttagcreatedError, fragmenttextcreatedError, getfragmentsError, internalserverError, limitReached, notFound, resourceCreated, s3Url, success, successful, textupdatedError, updateMessage } from "../utils/constant.js";
+import { bucketName, datanotFound, deletedResource, downloadfileError, downloadlimitExceed, fragmentCreated, fragmentdeleteError, fragmentfilecreatedError, fragmentsdocsfilterError, fragmentsfilterError, fragmentssearchError, fragmenttagcreatedError, fragmenttextcreatedError, getfragmentsError, internalserverError, limitReached, notFound, resourceCreated, s3Url, success, successful, textupdatedError, updateMessage } from "../utils/constant.js";
 import { AppError } from "../utils/error.js";
 import convertbytestoMb from '../utils/bytestoMb.js'
 import { insertfragmentfile, incrementstorageUsed, updatecapsule, insertfragmenttext, getallFragments, updateTag, updateText, deleteFragments, incrementdownloadCount, searchfragments, filterfragments, filterdocsfragments, capsuleUpdatetime, updatecapsuleSize, decrementstorageUsed } from '../database/dbquery.js'
@@ -123,7 +123,7 @@ export const deletebatchfragmentModal = async(fragmentids,userid,capsuleid) =>{
 
              await client.query(decrementstorageUsed,[capsuleSize,userid])
              await client.query('commit')
-            return { status: successful, message: success,rowdelete:rows.length}
+            return { status: successful, message: deletedResource,rowdelete:rows.length}
     } catch (error) {
         await client.query('rollback')
         throw new AppError({ status: internalserverError, message: fragmentdeleteError })
