@@ -8,7 +8,7 @@ export const filefragmentModal = async (capsuleid, size, tag, userid,filetype,fi
     const client = await pool.connect();
     try {
         const sizeinMb = convertbytestoMb(size)
-        const url = `${s3Url}/${bucketName}/${userid}/${filename}`
+        const url = `https://${bucketName}/${userid}/${filename}`
         const values = [capsuleid, sizeinMb, tag, url,filetype,filename]
         await client.query('begin')
         const res = await client.query(insertfragmentfile, values)
