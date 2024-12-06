@@ -3,11 +3,11 @@ import userRoutes from './src/routes/routes.js'
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { internalserverError } from './src/utils/constant.js';
 const app = express()
 const port = 3001
 app.use(cors({
-    origin: 'https://saveit.tech', // or specify your frontend origin
+    // origin: 'https://saveit.tech', // or specify your frontend origin
+    origin: 'http://localhost:5173', // or specify your frontend origin
     credentials: true,
 }))
 // app.options('*', (req, res) => {

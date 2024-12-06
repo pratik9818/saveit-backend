@@ -1,5 +1,5 @@
 import pool from "../database/dbConnection.js";
-import { bucketName, datanotFound, deletedResource, downloadfileError, downloadlimitExceed, fragmentCreated, fragmentdeleteError, fragmentfilecreatedError, fragmentsdocsfilterError, fragmentsfilterError, fragmentssearchError, fragmenttagcreatedError, fragmenttextcreatedError, getfragmentsError, internalserverError, limitReached, notFound, resourceCreated, s3Url, success, successful, textupdatedError, updateMessage } from "../utils/constant.js";
+import { bucketName, datanotFound, deletedResource, downloadfileError, downloadlimitExceed, downloadSuccess, fragmentCreated, fragmentdeleteError, fragmentfilecreatedError, fragmentsdocsfilterError, fragmentsfilterError, fragmentssearchError, fragmenttagcreatedError, fragmenttextcreatedError, freememberDownloadcount, getfragmentsError, internalserverError, limitReached, notFound, resourceCreated, s3Url, success, successful, textupdatedError, updateMessage } from "../utils/constant.js";
 import { AppError } from "../utils/error.js";
 import convertbytestoMb from '../utils/bytestoMb.js'
 import { insertfragmentfile, incrementstorageUsed, updatecapsule, insertfragmenttext, getallFragments, updateTag, updateText, deleteFragments, incrementdownloadCount, searchfragments, filterfragments, filterdocsfragments, capsuleUpdatetime, updatecapsuleSize, decrementstorageUsed } from '../database/dbquery.js'
@@ -135,14 +135,13 @@ export const deletebatchfragmentModal = async(fragmentids,userid,capsuleid) =>{
 export const downloadfilefragmentModal = async(fragmentid) =>{
     // const client = await database();
     try {
-        
             const res = await pool.query(incrementdownloadCount,[fragmentid]);
             const {download_count} = res.rows[0];
-            const freememberDownloadcount = 10
-            if(download_count < freememberDownloadcount+1){
+            
+            if(download_count == freememberDownloadcount){
                 return { status: limitReached, message: downloadlimitExceed,downloadcount:download_count}
             }
-            return { status: successful, message: success,downloadcount:download_count}
+            return { status: successful, message: downloadSuccess,downloadcount:download_count}
     } catch (error) {
         throw new AppError({ status: internalserverError, message: downloadfileError })
     }
