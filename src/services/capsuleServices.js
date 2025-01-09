@@ -1,9 +1,10 @@
 import { AppError } from "../utils/error.js"
-import { badRequest, capsulenameerror,capsuleiderror, dateError, orderMissing, capsulessizeError, useridAbsent, searchvalueError, absentdeleteCapsuleIds, capsuleDeleteLimit, capsuledeletelimitError } from "../utils/constant.js"
+import { badRequest, capsulenameerror,capsuleiderror, dateError, orderMissing, capsulessizeError, useridAbsent, searchvalueError, absentdeleteCapsuleIds, capsuleDeleteLimit, capsuledeletelimitError, capsuleNameCharLimit, capsuleNameCharLimitError } from "../utils/constant.js"
 import {newcapsuleModal, getcapsulesortbyDatecreatedModal,getcapsulesearchModal, getcapsulesbyDatemodifiedModal,editcapsuleModal, getcapsulesortbysizeModal, deletebatchcapsulesModal } from "../models/capsuleModals.js"
 
 export const newCapsule = async (capsulename, userid) => {
     if (!capsulename.length ) return {status:badRequest,message:capsulenameerror}
+    if(capsulename.length > capsuleNameCharLimit)return {status:badRequest,message:capsuleNameCharLimitError}
    try {
     return await newcapsuleModal(capsulename, userid)
    } catch (error) {
