@@ -103,7 +103,8 @@ CREATE TABLE reminder (
 const feedback = `CREATE TABLE feedback (
     id SERIAL PRIMARY KEY,               
     user_id UUID NOT NULL,                 
-    bugs TEXT,                           
+    bugs TEXT,            
+    for_what TEXT,            
     features TEXT,                       
     improvements TEXT,                   
     suggestions TEXT,                    

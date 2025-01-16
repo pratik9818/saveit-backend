@@ -2,9 +2,9 @@ import { feedbackService } from "../services/feedbackService.js";
 
 const feedbackController = async(req,res,next)=>{
     const userId = req.user_id;
-    const {bugs,features,improvements,suggestions} = req.body
+    const {bugs,features,improvements,suggestions,forWhat} = req.body
     try {
-        const {status,message} = await feedbackService(userId,bugs,features,improvements,suggestions)
+        const {status,message} = await feedbackService(userId,bugs,features,improvements,suggestions,forWhat)
         res.status(status).json({
             message: message
         })
