@@ -50,6 +50,7 @@ export const getcapsulesbyDatemodifiedModal = async(datemodified,userid) =>{
     try {
             const res = await pool.query(getcaplsulesbyDatemodified,[userid,datemodified]);
             
+            
             if(!res.rows.length) return { status:notFound, message: datanotFound }
             return { status: successful, message: success , data:res.rows}
     } catch (error) {
