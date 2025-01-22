@@ -93,7 +93,7 @@ export const deleteFragments = async(req,res,next)=>{
 }
 export const downloadFile = async(req,res,next)=>{
     const userId = req.user_id;
-    const {fragmentId} = req.body;
+    const fragmentId = req.query.fragmentId;
     try {
         const {status,message,downloadcount} = await downloadfileService(fragmentId,userId)
         res.status(status).json({

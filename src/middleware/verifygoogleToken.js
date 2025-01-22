@@ -5,8 +5,10 @@ import { badRequest, googletokenAbsent, internalserverError, verifygoogletokenEr
 dotenv.config()
 const client = new OAuth2Client()
 const clientId = process.env.GOOGLE_CLIENT
+
 const verifygoogleToken  = async (req,res,next)=>{
     const googleToken = req?.body.token
+    
     if(!googleToken) throw new AppError({status:badRequest,message:googletokenAbsent})
         try {
          const res = await client.verifyIdToken({
@@ -14,10 +16,13 @@ const verifygoogleToken  = async (req,res,next)=>{
                  audience:clientId
          })
          const {email,name} = res.getPayload()
+         
          req.email = email;
          req.username = name;
          next()
         } catch (error) {
+                console.log(error);
+                
          next({status:internalserverError,message:verifygoogletokenError})
         }
 }
