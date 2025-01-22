@@ -1,5 +1,5 @@
 import pool from "../database/dbConnection.js";
-import { bucketName, datanotFound, deletedResource, downloadfileError, downloadlimitExceed, downloadSuccess, fragmentCreated, fragmentdeleteError, fragmentfilecreatedError, fragmentsdocsfilterError, fragmentsfilterError, fragmentssearchError, fragmenttagcreatedError, fragmenttextcreatedError, freememberDownloadcount, getfragmentsError, internalserverError, limitReached, notFound, resourceCreated, s3Url, success, successful, textupdatedError, updateMessage } from "../utils/constant.js";
+import { allDataFetched, bucketName, datanotFound, deletedResource, downloadfileError, downloadlimitExceed, downloadSuccess, fragmentCreated, fragmentdeleteError, fragmentfilecreatedError, fragmentsdocsfilterError, fragmentsfilterError, fragmentssearchError, fragmenttagcreatedError, fragmenttextcreatedError, freememberDownloadcount, getfragmentsError, internalserverError, limitReached, notFound, resourceCreated, s3Url, success, successful, textupdatedError, updateMessage } from "../utils/constant.js";
 import { AppError } from "../utils/error.js";
 import convertbytestoMb from '../utils/bytestoMb.js'
 import { insertfragmentfile, incrementstorageUsed, updatecapsule, insertfragmenttext, getallFragments, updateTag, updateText, deleteFragments, incrementdownloadCount, searchfragments, filterfragments, filterdocsfragments, capsuleUpdatetime, updatecapsuleSize, decrementstorageUsed } from '../database/dbquery.js'
@@ -66,7 +66,7 @@ export const getfragmentModal = async (createdat, userid ,capsuleid) => {
     // const client = await database()
     try {
         const res = await pool.query(getallFragments, [capsuleid,createdat])
-        if(!res.rows.length)return { status: notFound, message: datanotFound,data:null };
+        if(!res.rows.length)return { status: successful, message: allDataFetched,data:null };
         return { status: successful, message: success,data:res.rows };
     } catch (error) {
         throw new AppError({ status: internalserverError, message: getfragmentsError })

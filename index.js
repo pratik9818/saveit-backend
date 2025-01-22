@@ -6,17 +6,15 @@ import cookieParser from 'cookie-parser';
 const app = express()
 const port = 3001
 app.use(cors({
-    // origin: 'https://saveit.tech', // or specify your frontend origin
-    origin: 'http://localhost:5173', // or specify your frontend origin
+    origin: [
+        'https://saveit.tech',
+        'chrome-extension://llgdeocihbfhkbnmphgfjihngblobiom'
+    ], // or specify your frontend origin
+    // origin: [
+    //     'http://localhost:5173',
+    //   ], // or specify your frontend origin
     credentials: true,
 }))
-// app.options('*', (req, res) => {
-//     res.header('Access-Control-Allow-Origin', 'http://localhost:5500');
-//     res.header('Access-Control-Allow-Credentials', 'true');
-//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-//     res.sendStatus(204); // Respond with 204 No Content
-// });
 app.use(express.json());
 app.use(cookieParser())
 // app.use(express.raw({ type: 'application/octet-stream'}));
