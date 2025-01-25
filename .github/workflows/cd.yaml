@@ -20,14 +20,13 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          # Adding the server to known hosts to prevent interactive prompts
           ssh-keyscan -H 159.65.151.121 >> ~/.ssh/known_hosts
 
       # Step 3: Deploy to Droplet
       - name: Deploy Backend
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          ssh root@159.65.151.121 << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@159.65.151.121 << 'EOF'
             # Navigate to deployment directory
             cd /root || exit 1
 
@@ -43,20 +42,19 @@ jobs:
 
             # Step 3.3: Create saveit-backend directory
             mkdir saveit-backend
-
           EOF
 
       # Step 4: Upload new backend code to Droplet
       - name: Upload Backend Files
         run: |
+          # Ensure the right permissions for SSH key
+          chmod 600 ~/.ssh/id_rsa
           scp -r ./ root@159.65.151.121:/root/saveit-backend
 
       # Step 5: Finalize setup on Droplet
       - name: Finalize Deployment
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          ssh root@159.65.151.121 << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@159.65.151.121 << 'EOF'
             # Step 5.1: Copy .env from old-saveit-backend to saveit-backend
             if [ -f "old-saveit-backend/.env" ]; then
               cp old-saveit-backend/.env saveit-backend/
