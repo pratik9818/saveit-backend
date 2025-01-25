@@ -1,0 +1,74 @@
+name: Deploy Backend to Droplet
+
+on:
+  push:
+    branches:
+      - main # Adjust branch as needed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up SSH
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 159.65.151.121 >> ~/.ssh/known_hosts
+
+      # Step 3: Deploy to Droplet
+      - name: Deploy Backend
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          ssh root@159.65.151.121 << 'EOF'
+            # Navigate to deployment directory
+            cd /root || exit 1
+
+            # Step 3.1: Delete old-saveit-backend if it exists
+            if [ -d "old-saveit-backend" ]; then
+              rm -rf old-saveit-backend
+            fi
+
+            # Step 3.2: Rename current saveit-backend to old-saveit-backend
+            if [ -d "saveit-backend" ]; then
+              mv saveit-backend old-saveit-backend
+            fi
+
+            # Step 3.3: Create saveit-backend directory
+            mkdir saveit-backend
+
+          EOF
+
+      # Step 4: Upload new backend code to Droplet
+      - name: Upload Backend Files
+        run: |
+          scp -r ./ root@159.65.151.121:/root/saveit-backend
+
+      # Step 5: Finalize setup on Droplet
+      - name: Finalize Deployment
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          ssh root@159.65.151.121 << 'EOF'
+            # Step 5.1: Copy .env from old-saveit-backend to saveit-backend
+            if [ -f "old-saveit-backend/.env" ]; then
+              cp old-saveit-backend/.env saveit-backend/
+            fi
+
+            # Step 5.2: Navigate to saveit-backend
+            cd saveit-backend || exit 1
+
+            # Step 5.3: Install dependencies
+            npm install
+
+            # Step 5.4: Restart application with PM2
+            pm2 delete index || true
+            pm2 start index.js
+          EOF
