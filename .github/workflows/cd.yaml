@@ -3,71 +3,54 @@ name: Deploy Backend to Droplet
 on:
   push:
     branches:
-      - main # Adjust branch as needed
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up SSH and add private key to ssh-agent
-      - name: Set up SSH and add private key to ssh-agent
+      # Step 2: Set up SSH
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 159.65.151.121 >> ~/.ssh/known_hosts
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
-          ssh-keyscan -H 159.65.151.121 >> ~/.ssh/known_hosts
 
-      # Step 3: Deploy to Droplet
-      - name: Deploy Backend
+      # Step 3: Test SSH Connection
+      - name: Test SSH Connection
         run: |
-          ssh -o StrictHostKeyChecking=no root@159.65.151.121 << 'EOF'
-            # Navigate to deployment directory
+          ssh -o StrictHostKeyChecking=no root@159.65.151.121 "echo SSH Connection Successful"
+
+      # Step 4: Deploy Code
+      - name: Deploy Code
+        run: |
+          ssh root@159.65.151.121 << 'EOF'
+            # Deployment steps
             cd /root || exit 1
-
-            # Step 3.1: Delete old-saveit-backend if it exists
-            if [ -d "old-saveit-backend" ]; then
-              rm -rf old-saveit-backend
-            fi
-
-            # Step 3.2: Rename current saveit-backend to old-saveit-backend
             if [ -d "saveit-backend" ]; then
-              mv saveit-backend old-saveit-backend
+              mv saveit-backend old-saveit-backend || true
             fi
-
-            # Step 3.3: Create saveit-backend directory
             mkdir saveit-backend
           EOF
 
-      # Step 4: Upload new backend code to Droplet
-      - name: Upload Backend Files
+      # Step 5: Upload Backend Files
+      - name: Upload Files
         run: |
-          # Ensure the right permissions for SSH key
-          chmod 600 ~/.ssh/id_rsa
           scp -r ./ root@159.65.151.121:/root/saveit-backend
 
-      # Step 5: Finalize setup on Droplet
+      # Step 6: Finalize Deployment
       - name: Finalize Deployment
         run: |
-          ssh -o StrictHostKeyChecking=no root@159.65.151.121 << 'EOF'
-            # Step 5.1: Copy .env from old-saveit-backend to saveit-backend
-            if [ -f "old-saveit-backend/.env" ]; then
-              cp old-saveit-backend/.env saveit-backend/
-            fi
-
-            # Step 5.2: Navigate to saveit-backend
-            cd saveit-backend || exit 1
-
-            # Step 5.3: Install dependencies
+          ssh root@159.65.151.121 << 'EOF'
+            cd /root/saveit-backend || exit 1
             npm install
-
-            # Step 5.4: Restart application with PM2
-            pm2 delete index || true
-            pm2 start index.js
+            pm2 restart index || pm2 start index.js
           EOF
