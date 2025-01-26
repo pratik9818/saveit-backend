@@ -30,16 +30,19 @@ jobs:
           ssh -o StrictHostKeyChecking=no root@159.65.151.121 "echo SSH Connection Successful"
 
       # Step 4: Deploy Code
-      - name: Deploy Code
+     - name: Deploy Code
         run: |
           ssh root@159.65.151.121 << 'EOF'
-            # Deployment steps
-            cd /root || exit 1
+            cd /root
+            # Remove old backup if exists
+            rm -rf old-saveit-backend
+            # Backup current deployment if exists
             if [ -d "saveit-backend" ]; then
-              mv saveit-backend old-saveit-backend || true
+              mv saveit-backend old-saveit-backend
             fi
-            mkdir saveit-backend
-          EOF
+            # Create fresh directory
+            mkdir -p saveit-backend
+             EOF
 
       # Step 5: Upload Backend Files
       - name: Upload Files
@@ -47,23 +50,18 @@ jobs:
           scp -r ./ root@159.65.151.121:/root/saveit-backend
 
       # Step 6: Finalize setup on Droplet
-      - name: Finalize Deployment
-        run: |
-          ssh root@159.65.151.121 << 'EOF'
-            # Step 5.1: Copy .env from old-saveit-backend to saveit-backend
-            if [ -f "old-saveit-backend/.env" ]; then
-              cp old-saveit-backend/.env saveit-backend/
-            fi
-
-            # Step 5.2: Navigate to saveit-backend
-            cd saveit-backend || exit 1
-
-            # Step 5.3: Install dependencies
-            npm install
-
-            # Step 5.4: Restart application with PM2
-            pm2 delete index || true
-            pm2 start index.js
-          EOF
+     - name: Finalize Deployment
+       run: |
+        ssh root@159.65.151.121 << 'EOF'
+          cd /root
+          # Copy .env from backup if exists
+          if [ -f "old-saveit-backend/.env" ]; then
+            cp old-saveit-backend/.env saveit-backend/
+          fi
+          cd saveit-backend
+          npm install
+          pm2 delete index || true
+          pm2 start index.js
+        EOF
 
  
