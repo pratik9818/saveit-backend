@@ -8,60 +8,43 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Checkout code
-      - name: Checkout code
+      - name: Checkout code 
         uses: actions/checkout@v3
 
-      # Step 2: Set up SSH
       - name: Setup SSH
         env:
-           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 159.65.151.121 >> ~/.ssh/known_hosts
 
-      # Step 3: Test SSH Connection
-      - name: Test SSH Connection
-        run: |
-          ssh -o StrictHostKeyChecking=no root@159.65.151.121 "echo SSH Connection Successful"
-
-      # Step 4: Deploy Code
-     - name: Deploy Code
+      - name: Deploy Code
         run: |
           ssh root@159.65.151.121 << 'EOF'
             cd /root
-            # Remove old backup if exists
             rm -rf old-saveit-backend
-            # Backup current deployment if exists
             if [ -d "saveit-backend" ]; then
               mv saveit-backend old-saveit-backend
             fi
-            # Create fresh directory
             mkdir -p saveit-backend
-             EOF
+          EOF
 
-      # Step 5: Upload Backend Files
       - name: Upload Files
         run: |
           scp -r ./ root@159.65.151.121:/root/saveit-backend
 
-      # Step 6: Finalize setup on Droplet
-     - name: Finalize Deployment
-       run: |
-        ssh root@159.65.151.121 << 'EOF'
-          cd /root
-          # Copy .env from backup if exists
-          if [ -f "old-saveit-backend/.env" ]; then
-            cp old-saveit-backend/.env saveit-backend/
-          fi
-          cd saveit-backend
-          npm install
-          pm2 delete index || true
-          pm2 start index.js
-        EOF
-
- 
+      - name: Finalize Deployment
+        run: |
+          ssh root@159.65.151.121 << 'EOF'
+            cd /root
+            if [ -f "old-saveit-backend/.env" ]; then
+              cp old-saveit-backend/.env saveit-backend/
+            fi
+            cd saveit-backend
+            npm install
+            pm2 delete index || true
+            pm2 start index.js
+          EOF
