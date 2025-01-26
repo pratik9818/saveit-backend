@@ -46,11 +46,24 @@ jobs:
         run: |
           scp -r ./ root@159.65.151.121:/root/saveit-backend
 
-      # Step 6: Finalize Deployment
+      # Step 6: Finalize setup on Droplet
       - name: Finalize Deployment
         run: |
           ssh root@159.65.151.121 << 'EOF'
-            cd /root/saveit-backend || exit 1
+            # Step 5.1: Copy .env from old-saveit-backend to saveit-backend
+            if [ -f "old-saveit-backend/.env" ]; then
+              cp old-saveit-backend/.env saveit-backend/
+            fi
+
+            # Step 5.2: Navigate to saveit-backend
+            cd saveit-backend || exit 1
+
+            # Step 5.3: Install dependencies
             npm install
-            pm2 restart index || pm2 start index.js
+
+            # Step 5.4: Restart application with PM2
+            pm2 delete index || true
+            pm2 start index.js
           EOF
+
+ 
