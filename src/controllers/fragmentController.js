@@ -108,8 +108,6 @@ export const searchFragments = async(req,res,next)=>{
     const searchValue = req.query.searchValue;
     const capsuleId = req.query.capsuleId;
     const userId = req.user_id;
-    console.log(searchValue,capsuleId);
-    
     try {
         const {status,message,data} = await getsearchFragments(searchValue,userId,capsuleId)
         res.status(status).json({
@@ -142,7 +140,6 @@ export const filterdocsFragments = async(req,res,next)=>{
     const userId = req.user_id;
     // const createdAt = req.query.createdAt;
     const createdAt = new Date()
-    console.log(capsuleId,createdAt);
     try {
         const {status,message,data} = await filterdocsfragmentsService(userId,capsuleId,createdAt)
         res.status(status).json({
