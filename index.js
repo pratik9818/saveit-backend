@@ -6,13 +6,13 @@ import cookieParser from 'cookie-parser';
 const app = express()
 const port = 3001
 app.use(cors({
-    origin: [
-        'https://saveit.tech',
-        'chrome-extension://llgdeocihbfhkbnmphgfjihngblobiom'
-    ], // or specify your frontend origin
     // origin: [
-    //     'http://localhost:5173',
-    //   ], // or specify your frontend origin
+    //     'https://saveit.tech',
+    //     'chrome-extension://llgdeocihbfhkbnmphgfjihngblobiom'
+    // ], // or specify your frontend origin
+    origin: [
+        'http://localhost:5173',
+      ], // or specify your frontend origin
     credentials: true,
 }))
 app.use(express.json());
