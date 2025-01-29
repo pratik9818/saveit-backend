@@ -3,26 +3,47 @@ import { allDataFetched, bucketName, datanotFound, deletedResource, downloadfile
 import { AppError } from "../utils/error.js";
 import convertbytestoMb from '../utils/bytestoMb.js'
 import { insertfragmentfile, incrementstorageUsed, updatecapsule, insertfragmenttext, getallFragments, updateTag, updateText, deleteFragments, incrementdownloadCount, searchfragments, filterfragments, filterdocsfragments, capsuleUpdatetime, updatecapsuleSize, decrementstorageUsed } from '../database/dbquery.js'
-export const filefragmentModal = async (capsuleid, size, tag, userid,filetype,filename) => {
+export const filefragmentModal = async (fileObjectsArray,userid) => {
 
     const client = await pool.connect();
     try {
-        const sizeinMb = convertbytestoMb(size)
-        const url = `https://${bucketName}/${userid}/${filename}`
-        const values = [capsuleid, sizeinMb, tag, url,filetype,filename]
+        let capsuleId = fileObjectsArray[0].capsuleId;
+        
         await client.query('begin')
-        const res = await client.query(insertfragmentfile, values)
-        if (res) {
-            const updated_at = new Date()
+        const insertPromises = fileObjectsArray.map(({ capsuleId, size, tag, fileType, fileName }) => {
+            const sizeInMb = convertbytestoMb(size);
+            const url = `https://${bucketName}/${userid}/${fileName}`;
             
-            const res2 = await client.query(incrementstorageUsed, [sizeinMb, userid])
-            const res3 = await client.query(updatecapsule, [sizeinMb,updated_at, userid,capsuleid])
+            // Use parameterized values instead of string concatenation
+            return client.query(insertfragmentfile, [
+                capsuleId, 
+                sizeInMb, 
+                tag, 
+                url, 
+                fileType, 
+                fileName
+            ]);
+        });
+        
+        // Execute all inserts in parallel
+        const fragmentResults = await Promise.all(insertPromises);
+        const rows = fragmentResults.map(result => result.rows[0]);
+                              
+        if (fragmentResults) {
+            const updated_at = new Date()
+            const totalSize = fileObjectsArray.reduce((acc, { size }) => 
+                acc + Number(convertbytestoMb(size)), 0
+            )
+            const res2 = await client.query(incrementstorageUsed, [totalSize, userid])
+            const res3 = await client.query(updatecapsule, [totalSize,updated_at, userid,capsuleId])
             await Promise.all([res2, res3])
             await client.query('commit')
             
-            return { status: resourceCreated, message: fragmentCreated , data:res.rows[0] };
+            return { status: resourceCreated, message: fragmentCreated , data:rows };
         }
     } catch (error) {
+        console.log(error);
+        
         await client.query('rollback')
         throw new AppError({ status: internalserverError, message: fragmentfilecreatedError })
     }

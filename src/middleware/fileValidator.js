@@ -4,9 +4,8 @@ import { badRequest, filecountError, filenamecharLimit, filenameError, filesizeE
 const fileValidator = (req,res,next)=>{
         const fileSize = convertbytestoMb(req.body.size);
         const fileCount = req.body.fileCount
-        const fileName = req.body.fileName;
-        if(!fileSize || !fileCount)return next({status:badRequest,message:missingkey});
-        if (!fileName || fileName.length < filenamecharLimit) return next({status:badRequest,message:filenameError});
+        const fileName = req.body.fileNames;
+        if(!fileSize || !fileCount | !fileName.length)return next({status:badRequest,message:missingkey});
         if (fileSize > uploadLimit) return next({status:badRequest,message:filesizeError});
         if (fileCount > maxbatchUpload) return next({status:badRequest,message:filecountError});
         next()

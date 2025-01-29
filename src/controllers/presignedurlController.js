@@ -2,13 +2,13 @@ import { uploadPresignedurlService } from "../services/presignedurlService.js"
 
 export const uploadPresignedurl = async (req, res,next) => {
     const userId = req.user_id
-    const fileName = req.body.fileName //in s3 filename must be unique 
+    const fileNames = req.body.fileNames //in s3 filename must be unique 
     try {
-        const { status, message, data } = await uploadPresignedurlService(userId,fileName)
+        const { status, message, urls } = await uploadPresignedurlService(userId,fileNames)
         
         res.status(status).json({
             message: message,
-            url:data
+            presignedUrls:urls
         })
     } catch (error) {
         next({ status: error.status, message: error.message })

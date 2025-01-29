@@ -2,10 +2,10 @@ import { filefragmentService ,textfragmentService,getFragmentsService, fragmentt
 
 export const fileFragment = async(req,res,next)=>{
     const userId = req.user_id;
-    const {capsuleId ,size,tag ,fileType,fileName} = req.body;
+    const fileObjectsArray = req.body.fileObjects;
     
     try {
-        const {status,message,data} = await filefragmentService(capsuleId ,size,tag,userId,fileType,fileName)
+        const {status,message,data} = await filefragmentService(fileObjectsArray,userId)
         
         res.status(status).json({
             message: message,
