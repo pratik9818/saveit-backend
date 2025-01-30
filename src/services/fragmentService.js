@@ -2,13 +2,20 @@ import { filefragmentModal,textfragmentModal,getfragmentModal,fragmenttagModal, 
 import { absentdeleteFragmentsIds, badRequest, capsuleiderror, fragmentDeleteLimit, fragmentdeletelimitError, fragmenttypeAbsent, missingkey, searchvalueError, tagcharError, tagcharLimit, textcharLimit, textcharlimitExceed, useridAbsent } from "../utils/constant.js"
 import { AppError } from "../utils/error.js"
 
-export const filefragmentService = async (capsuleid, size, tag, userid,filetype,filename) => {
-    
+export const filefragmentService = async (fileObjectsArray,userid) => {
     if (!userid) return { status: badRequest, message: useridAbsent }
-    if (!capsuleid || !size || !filetype || !filename) return { status: badRequest, message: missingkey }
-    if(!tag) tag = null; //need to test this
+
+    const requiredKeys = ['capsuleId', 'size', 'fileType', 'fileName'];
+    
+    const isValid = fileObjectsArray.every(obj => 
+        requiredKeys.every(key => obj[key] !== undefined && obj[key] !== null && obj[key] !== '')
+    );
+
+    if (!isValid) {
+        return { status: badRequest, message: missingkey }
+    }
     try {
-        return await filefragmentModal(capsuleid, size, tag, userid ,filetype,filename)
+        return await filefragmentModal(fileObjectsArray,userid )
     } catch (error) {
         throw new AppError({ status: error.status, message: error.message })
     }
