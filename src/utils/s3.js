@@ -27,8 +27,6 @@ export const generateuploadpresignedUrl = async (bucketname, filenames, userid) 
             const cleanUrl = uploadUrl.replace('https://s3.wasabisys.com/', 'https://');
             return cleanUrl;
         }));
-        console.log(uploadUrls);
-
         return {
             status: successful,
             message: success,
