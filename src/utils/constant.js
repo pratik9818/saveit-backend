@@ -52,7 +52,6 @@ export const tagcharError = 'tag char exceed'
 export const filenameError = 'File name should be more then 2 char'
 export const bucketName = 'files.saveit.tech'
 export const missingkey = 'missing key'
-export const textcharlimitExceed = 'Text char limit exceed'
 export const logoutSucessfully = 'Logout !'
 export const logoutError = 'Something went wrong while logout !'
 export const feedbackError = 'Something went wrong while giveing feedback !'
@@ -78,6 +77,8 @@ export const filesizeError = `Upload size should be less then ${uploadLimit} mb`
 export const filenamecharLimit = 2
 export const presignedurlExpire = 60 * 10
 export const textcharLimit = 10000; //10k char
+export const textcharlimitExceed =`10k char limit exceed`
+
 export const tagcharLimit = 100;
 // export const compresstype = 'zip'
 export const badRequest = 400;
