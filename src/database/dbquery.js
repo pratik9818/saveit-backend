@@ -36,3 +36,4 @@ export const updatecapsuleSize = 'update capsules set capsule_size = capsule_siz
 export const decrementstorageUsed = 'update subscription_detail set storage_used = storage_used - $1 where user_id=$2';
 export const updatesubDetailOnDeleteCapsule = 'update subscription_detail set storage_used = storage_used - $1 , capsule_count_used = capsule_count_used - $2 where user_id=$3';
 export const feedbackquery = 'insert into feedback (bugs,features,improvements,suggestions,for_what,user_id) values($1,$2,$3,$4,$5,$6)';
+export const  getUserName = 'select user_name from users where user_id=$1';
