@@ -23,7 +23,7 @@ export const insertfragmentfile = 'insert into fragments (capsule_id,size,tag,ur
 export const insertfragmenttext = 'insert into fragments (capsule_id,size,tag,fragment_type,text_content) values ($1, $2, $3, $4,$5) returning fragment_id , size';
 export const incrementstorageUsed = 'update subscription_detail set storage_used = storage_used + $1 where user_id=$2';
 export const updatecapsule = 'update capsules set capsule_size = capsule_size + $1 , updated_at=$2 where capsule_id=$4 and user_id=$3';
-export const getallFragments = 'select * from fragments where capsule_id=$1 and created_at < $2 and is_deleted=false order by created_at desc limit 7'
+export const getallFragments = 'select * from fragments where capsule_id=$1 and created_at < $2 and is_deleted=false order by created_at desc limit 12'
 export const updateTag = 'update fragments set tag = $1 , updated_at=$2 where fragment_id=$3';
 export const updateText = 'update fragments set text_content = $1 , updated_at=$2 , size=$3 where fragment_id=$4';
 export const deleteFragments = 'update fragments set is_deleted = true where fragment_id= any($1) returning size'
@@ -36,3 +36,4 @@ export const updatecapsuleSize = 'update capsules set capsule_size = capsule_siz
 export const decrementstorageUsed = 'update subscription_detail set storage_used = storage_used - $1 where user_id=$2';
 export const updatesubDetailOnDeleteCapsule = 'update subscription_detail set storage_used = storage_used - $1 , capsule_count_used = capsule_count_used - $2 where user_id=$3';
 export const feedbackquery = 'insert into feedback (bugs,features,improvements,suggestions,for_what,user_id) values($1,$2,$3,$4,$5,$6)';
+export const  getUserName = 'select user_name from users where user_id=$1';
